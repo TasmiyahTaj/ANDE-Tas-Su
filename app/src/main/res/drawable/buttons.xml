@@ -1,0 +1,21 @@
+<!-- buttons.xml -->
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
+        <shape>
+            <solid android:color="#FFB6C1" /> <!-- Use a different color for pressed state if needed -->
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+    <item android:state_focused="true">
+        <shape>
+            <solid android:color="#FFB6C1" /> <!-- Use a different color for focused state if needed -->
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+    <item>
+        <shape>
+            <solid android:color="@color/baby_pink"/>
+            <corners android:radius="5dp" />
+        </shape>
+    </item>
+</selector>

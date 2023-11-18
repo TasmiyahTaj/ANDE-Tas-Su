@@ -1,3 +1,11 @@
 <resources>
-    <string name="app_name">StudyLink_Studio_DIT2B03</string>
+    <string name="app_name">StudyLink</string>
+    <string name="username">Username</string>
+    <string name="cfmPwd">Confirm Password</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="signUp">Sign Up</string>
+    <string name="loginbtn">Login</string>
+    <string name="if_no_acc">Do not have an account? Sign Up</string>
+    <string name="have_acc">Have an Account? Login</string>
 </resources>
