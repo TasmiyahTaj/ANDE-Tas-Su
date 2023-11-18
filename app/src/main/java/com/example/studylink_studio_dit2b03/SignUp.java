@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,10 +17,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class SignUp extends AppCompatActivity implements View.OnClickListener {
     int token = 0;
-    private String dUsername;
-    TextView rUsername;
+    private EditText username,email;
+ private String sUsername,sEmail;
     String msg = "From SignUp Class : ";
-
+    private String institution;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,7 +32,6 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 verifyToken();
             }
         });
@@ -38,14 +39,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         TextView loginTextView = findViewById(R.id.LoginFromSignUp);
         loginTextView.setOnClickListener(this);
 
-        rUsername=(TextView) findViewById(R.id.txtUsername);
-        Bundle getData = getIntent().getExtras();
-        if(getData !=null){
-            dUsername=getData.getString("rUsername");
-            rUsername.setText(dUsername);
-        }else{
-            Toast.makeText(getApplicationContext(),"Failed to get Data",Toast.LENGTH_LONG).show();
-        }
+       username= (EditText)findViewById(R.id.txtUsername);
     }
 
     public void onClick(View v) {
@@ -59,10 +53,64 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
 
     private int generateToken() {
         token = (int) (Math.random() * 900000) + 100000;
-        System.out.println("from generatedToken"+token);
+        System.out.println("from generatedToken "+token);
         return token;
     }
+private void userInstitution(){
+        sUsername=username.getText().toString()
+    AlertDialog.Builder getInstitution = new AlertDialog.Builder(this);
+    final Spinner institutionDropdown = new Spinner(this);
+    ArrayAdapter<String> insitutionArr = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
+            new String[]{"Singapore Polytechnic", "National University Of Singapore", "Ngee Ann Polytechnic","Nanyang Polytechnic","Nanyang Technological University"});
+    institutionDropdown.setAdapter(insitutionArr);
+    getInstitution.setView(institutionDropdown)
+            .setTitle("Hi " + sUsername + ", which institution are you from?")
+            .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Store the selected institution
+                     institution = institutionDropdown.getSelectedItem().toString();
+                    // Show the next dialog
+                    userCourses();
+                }
+            })
+            .setNegativeButton("Back", null)
+            .show();
+}
+public void userCourses(){
+    AlertDialog.Builder courseAlert = new AlertDialog.Builder(this);
+    final Spinner courseSpinner = new Spinner(this);
 
+    // Set up the spinner with your course options
+    ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
+            new String[]{"Information Technology", "Course 2", "Course 3"});
+    courseSpinner.setAdapter(adapter);
+
+    courseAlert.setView(courseSpinner)
+            .setTitle("Hi " + sUsername + ",Which course are you from?")
+            .setPositiveButton("Next", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Store the selected course
+                    String course = courseSpinner.getSelectedItem().toString();
+                    // Now you have all the information you need, you can proceed to the next activity
+                    Intent i = new Intent(SignUp.this, MainActivity.class);
+                    // Pass the collected information to the next activity if needed
+                    i.putExtra("username", dUsername);
+                    i.putExtra("institution", institution);
+                    i.putExtra("course", course);
+                    startActivity(i);
+                }
+            })
+            .setNegativeButton("Back", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    // Show the previous dialog
+                    userInstitution();
+                }
+            })
+            .show();
+}
     private void verifyToken() {
         AlertDialog.Builder tokenAlert = new AlertDialog.Builder(this);
         final EditText userInput = new EditText(this);
@@ -76,8 +124,12 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
                         String input = userInput.getText().toString();
                         if (input.equals(String.valueOf(generatedToken))) {
                             Log.d(msg, "Successful");
-                            Intent intent = new Intent(SignUp.this, MainActivity.class);
-                            startActivity(intent);
+                            userInstitution();
+//                            Intent intent = new Intent(SignUp.this, MainActivity.class);
+//                            startActivity(intent);
+
+
+
                         } else {
                             Log.d(msg, "Wrong token");
                             dialog.dismiss();
