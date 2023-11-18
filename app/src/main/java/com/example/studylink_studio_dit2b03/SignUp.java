@@ -57,7 +57,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         return token;
     }
 private void userInstitution(){
-        sUsername=username.getText().toString()
+        sUsername=username.getText().toString();
     AlertDialog.Builder getInstitution = new AlertDialog.Builder(this);
     final Spinner institutionDropdown = new Spinner(this);
     ArrayAdapter<String> insitutionArr = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
@@ -83,7 +83,7 @@ public void userCourses(){
 
     // Set up the spinner with your course options
     ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item,
-            new String[]{"Information Technology", "Course 2", "Course 3"});
+            new String[]{"Information Technology", "Robotics and mechatronics", "Aerospace","Electrical Engineering","Information systems"});
     courseSpinner.setAdapter(adapter);
 
     courseAlert.setView(courseSpinner)
@@ -96,8 +96,10 @@ public void userCourses(){
                     // Now you have all the information you need, you can proceed to the next activity
                     Intent i = new Intent(SignUp.this, MainActivity.class);
                     // Pass the collected information to the next activity if needed
-                    i.putExtra("username", dUsername);
+                    sEmail=email.getText().toString();
+                    i.putExtra("username", sUsername);
                     i.putExtra("institution", institution);
+                    i.putExtra("email",sEmail);
                     i.putExtra("course", course);
                     startActivity(i);
                 }
