@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -35,14 +36,16 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 Intent toSignUp= new Intent(this,SignUp.class );
                 startActivity(toSignUp);
                 break;
+
             case R.id.btnLogin:
                 sEmail = email.getText().toString();
                 sPwd = password.getText().toString();
                 if(isValidEmail(sEmail)&& !sPwd.isEmpty()){
-                    Intent toHome = new Intent(this,MainActivity.class);
+                    Intent toHome = new Intent(this,Home.class);
                     startActivity(toHome);
+                }else{
+                    Toast.makeText(getApplicationContext(),"Invalid Email or password",Toast.LENGTH_LONG).show();
                 }
-
         }
     }
 }

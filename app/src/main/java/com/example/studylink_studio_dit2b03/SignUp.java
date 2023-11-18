@@ -83,7 +83,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
             new String[]{"Singapore Polytechnic", "National University Of Singapore", "Ngee Ann Polytechnic","Nanyang Polytechnic","Nanyang Technological University"});
     institutionDropdown.setAdapter(insitutionArr);
     getInstitution.setView(institutionDropdown)
-            .setTitle("Hi " + sUsername + ", \n\nWhich institution are you from?")
+            .setTitle("Hi " + sUsername + ", \nWhich institution are you from?")
             .setPositiveButton("Next", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -106,14 +106,14 @@ public void userCourses(){
     courseSpinner.setAdapter(adapter);
 
     courseAlert.setView(courseSpinner)
-            .setTitle("Hi " + sUsername + ", \n\nWhich course are you from?")
+            .setTitle("Hi " + sUsername + ", \nWhich course are you from?")
             .setPositiveButton("Next", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     // Store the selected course
                     String course = courseSpinner.getSelectedItem().toString();
                     // Now you have all the information you need, you can proceed to the next activity
-                    Intent i = new Intent(SignUp.this, MainActivity.class);
+                    Intent i = new Intent(SignUp.this, Home.class);
                     // Pass the collected information to the next activity if needed
 
 
