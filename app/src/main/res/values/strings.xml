@@ -8,4 +8,16 @@
     <string name="loginbtn">Login</string>
     <string name="if_no_acc">Do not have an account? Sign Up</string>
     <string name="have_acc">Have an Account? Login</string>
+    <string name="upcomingTitle">Normalization in Data Engineering</string>
+    <string name="upcomingLocation">Pod @ L3.3 SP Library</string>
+    <string name="upcomingTime">11:30 - 12:00</string>
+    <string name="userName">Rang Rang</string>
+    <string name="userSchool">Singapore Polytechnic</string>
+    <string name="coursePrice">$5/hr</string>
+    <string name="courseName">How To Master ERD</string>
+    <string name="courseTutorName">By Rang Rang</string>
+    <string name="courseDate">23/11/2023</string>
+    <string name="courseType">Individual</string>
+
+
 </resources>
