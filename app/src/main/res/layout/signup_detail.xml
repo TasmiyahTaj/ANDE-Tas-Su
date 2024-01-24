@@ -1,0 +1,120 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@color/baby_pink"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- RadioGroup for choosing the role -->
+    <RadioGroup
+        android:id="@+id/roleRadioGroup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:layout_centerHorizontal="true">
+
+        <RadioButton
+            android:id="@+id/studentRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I am a Student" />
+
+        <RadioButton
+            android:id="@+id/teacherRadioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="I am a Teacher" />
+    </RadioGroup>
+
+    <!-- Student Fields -->
+    <LinearLayout
+        android:id="@+id/studentFieldsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_below="@id/roleRadioGroup"
+        android:visibility="gone"
+       >
+
+        <!-- Institution Spinner -->
+        <Spinner
+            android:id="@+id/institutionSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:hint="Select your Institution"/>
+
+        <!-- Course Spinner -->
+        <Spinner
+            android:id="@+id/courseSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:padding="8dp"
+            android:background="@android:color/white"
+            android:hint="Select your Course"/>
+
+    </LinearLayout>
+
+    <!-- Teacher Fields -->
+    <LinearLayout
+        android:id="@+id/teacherFieldsLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/roleRadioGroup"
+        android:layout_marginTop="16dp"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <!-- Highest Education Spinner -->
+        <Spinner
+            android:id="@+id/educationSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/white"
+            android:hint="Select your Highest Education"
+            android:padding="8dp" />
+
+        <!-- Specialized Course Spinner -->
+        <Spinner
+            android:id="@+id/specializedCourseSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:background="@android:color/white"
+            android:hint="Select your Specialized Course"
+            android:padding="8dp" />
+
+        <!-- Work Experience Years EditText -->
+        <EditText
+            android:id="@+id/workExperienceEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:background="@android:color/white"
+            android:hint="Enter your Work Experience (in years)"
+            android:inputType="number"
+            android:padding="8dp" />
+
+    </LinearLayout>
+
+    <!-- Button to proceed to the next step -->
+    <Button
+        android:id="@+id/btnNext"
+        android:layout_width="321dp"
+        android:layout_height="82dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+
+        android:layout_marginStart="39dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="230dp"
+        android:text="Next"
+        android:visibility="gone" />
+
+
+</RelativeLayout>

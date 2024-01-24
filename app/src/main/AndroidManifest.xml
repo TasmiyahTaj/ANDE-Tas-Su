@@ -25,6 +25,8 @@
         </activity>
         <activity android:name=".Login" />
         <activity android:name=".SignUp" />
+        <activity android:name=".SignUpDetail" />
+
         <activity android:name=".Home" />
 
         <meta-data
