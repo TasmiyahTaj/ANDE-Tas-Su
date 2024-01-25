@@ -70,13 +70,13 @@ int roleid;
                     // User selected role as Student
                     saveUserToDatabase();
                     saveStudentToDatabase(selectedInstitution, selectedCourse);
-                    startActivity(new Intent(SignUpDetail.this, Home.class));
+                    startActivity(new Intent(SignUpDetail.this, HomeFragment.class));
                 } else if (teacherRadioButton.isChecked()) {
                     // User selected role as Teacher
                     saveUserToDatabase();
 
                     saveTeacherToDatabase();
-                    startActivity(new Intent(SignUpDetail.this, Home.class));
+                    startActivity(new Intent(SignUpDetail.this, HomeFragment.class));
 
                 } else {
                     // No role selected

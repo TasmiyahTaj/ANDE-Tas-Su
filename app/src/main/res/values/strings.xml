@@ -18,6 +18,9 @@
     <string name="courseTutorName">By Rang Rang</string>
     <string name="courseDate">23/11/2023</string>
     <string name="courseType">Individual</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="logout">Log Out</string>
 
 
 </resources>

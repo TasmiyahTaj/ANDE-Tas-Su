@@ -77,7 +77,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                             public void onSuccess(AuthResult authResult) {
                                 saveUserID(authResult.getUser().getUid());
                                 Toast.makeText(Login.this, "Login Successful", Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(Login.this, Home.class));
+                                startActivity(new Intent(Login.this, MainActivity.class));
                                 finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
