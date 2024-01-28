@@ -1,11 +1,13 @@
 package com.example.studylink_studio_dit2b03;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -17,20 +19,31 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SignUpDetail extends AppCompatActivity {
+public class SignUpDetail extends AppCompatActivity{
+    FirebaseStorage storage = FirebaseStorage.getInstance();
+    StorageReference storageRef = storage.getReference();
 
     private Spinner institutionSpinner, courseSpinner, educationSpinner, specializedCourseSpinner;
     private EditText workExperienceEditText;
     private RadioButton studentRadioButton, teacherRadioButton;
     private LinearLayout studentFieldsLayout, teacherFieldsLayout;
     private String userId, username, email;
+    private ImageView profile;
+    User user;
 int roleid;
+    private static final int PICK_IMAGE_REQUEST = 1;
+    private Uri profileImageUri;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,13 +62,18 @@ int roleid;
         teacherRadioButton = findViewById(R.id.teacherRadioButton);
         studentFieldsLayout = findViewById(R.id.studentFieldsLayout);
         teacherFieldsLayout = findViewById(R.id.teacherFieldsLayout);
-
+profile=findViewById(R.id.profileImageView);
         // Populate spinners with data from Android Studio (dummy data for demonstration)
         populateInstitutionsSpinner();
         populateCoursesSpinner();
         populateEducationSpinner();
         populateSpecializedCourseSpinner();
-
+        profile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openFileChooser();
+            }
+        });
         // Add a button click listener to proceed to the next step
         Button btnNext = findViewById(R.id.btnNext);
         btnNext.setOnClickListener(new View.OnClickListener() {
@@ -110,10 +128,30 @@ int roleid;
         });
     }
 
+
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            profileImageUri = data.getData();
+            // Set the selected image to the ImageView
+            profile.setImageURI(profileImageUri);
+        }
+    }
+
+
     // Other methods (populateInstitutionsSpinner, populateCoursesSpinner, etc.) remain unchanged
     private void saveUserToDatabase() {
         // Save user information in the "users" table of your database
-        User user = new User(userId,  email,username, roleid);
+         user = new User(userId, email, username, roleid);
 
         FirebaseFirestore.getInstance().collection("users")
                 .document(userId)
@@ -122,6 +160,7 @@ int roleid;
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
+                            uploadProfilePicture();
                             Toast.makeText(SignUpDetail.this, "User details saved successfully", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(SignUpDetail.this, "Error saving user details", Toast.LENGTH_SHORT).show();
@@ -129,6 +168,39 @@ int roleid;
                     }
                 });
     }
+
+    private void uploadProfilePicture() {
+        if (profileImageUri != null) {
+            StorageReference profilePicRef = storageRef.child("profile_pictures/" + userId + ".jpg");
+
+            profilePicRef.putFile(profileImageUri)
+                    .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                        @Override
+                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                            // Get the download URL for the uploaded image
+                            profilePicRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                @Override
+                                public void onSuccess(Uri downloadUri) {
+                                    // Save the download URL to the user object
+                                    user.setProfilePicUrl(downloadUri.toString());
+                                    // Update the user details in the database
+                                    FirebaseFirestore.getInstance().collection("users")
+                                            .document(userId)
+                                            .set(user); // Update the user with the profile picture URL
+                                }
+                            });
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            // Handle unsuccessful upload
+                            Toast.makeText(SignUpDetail.this, "Error uploading profile picture", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+        }
+    }
+
 
     private void saveStudentToDatabase(String institution, String course) {
         // Save user information in the "students" table of your database

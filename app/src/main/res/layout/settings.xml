@@ -8,11 +8,12 @@
 
     <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:id = "@+id/textViewProfile"
+        android:id = "@+id/txtNameSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Profile"
+        android:text="username"
         android:textSize="26dp"
+
         android:layout_centerHorizontal="true"
         />
 
@@ -20,9 +21,10 @@
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textViewProfile"
+        android:layout_below="@id/txtNameSettings"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
+
         android:text="Logout"
         />
 

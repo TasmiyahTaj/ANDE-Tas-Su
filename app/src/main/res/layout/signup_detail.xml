@@ -6,12 +6,27 @@
     android:layout_height="match_parent">
 
     <!-- RadioGroup for choosing the role -->
+
+    <!-- Student Fields -->
+    <ImageView
+        android:id="@+id/profileImageView"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/profile_pic"
+        android:contentDescription="Profile Picture"
+        android:background="@drawable/profile_border"
+        android:onClick="onClick" />
+
+
+    <!-- RadioGroup for choosing the role -->
     <RadioGroup
         android:id="@+id/roleRadioGroup"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_centerHorizontal="true">
+        android:layout_below="@id/profileImageView"
+        android:layout_marginTop="16dp">
 
         <RadioButton
             android:id="@+id/studentRadioButton"
@@ -26,15 +41,13 @@
             android:text="I am a Teacher" />
     </RadioGroup>
 
-    <!-- Student Fields -->
     <LinearLayout
         android:id="@+id/studentFieldsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
         android:layout_below="@id/roleRadioGroup"
-        android:visibility="gone"
-       >
+        android:orientation="vertical"
+        android:visibility="gone">
 
         <!-- Institution Spinner -->
         <Spinner
@@ -42,9 +55,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:padding="8dp"
             android:background="@android:color/white"
-            android:hint="Select your Institution"/>
+            android:textColorHint="@android:color/black"
+            android:textColor="@android:color/black"
+            android:backgroundTint="@android:color/darker_gray"
+            android:hint="Select your Institution"
+            android:padding="8dp" />
 
         <!-- Course Spinner -->
         <Spinner
@@ -52,9 +68,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
-            android:padding="8dp"
             android:background="@android:color/white"
-            android:hint="Select your Course"/>
+            android:textColorHint="@android:color/black"
+            android:textColor="@android:color/black"
+            android:backgroundTint="@android:color/darker_gray"
+            android:hint="Select your Course"
+            android:padding="8dp" />
 
     </LinearLayout>
 
@@ -75,6 +94,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@android:color/white"
+            android:textColorHint="@android:color/black"
+            android:textColor="@android:color/black"
+            android:backgroundTint="@android:color/darker_gray"
             android:hint="Select your Highest Education"
             android:padding="8dp" />
 
@@ -85,6 +107,9 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@android:color/white"
+            android:textColorHint="@android:color/black"
+            android:textColor="@android:color/black"
+            android:backgroundTint="@android:color/darker_gray"
             android:hint="Select your Specialized Course"
             android:padding="8dp" />
 
@@ -110,9 +135,9 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
 
-        android:layout_marginStart="39dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginBottom="230dp"
+        android:layout_marginStart="43dp"
+        android:layout_marginEnd="45dp"
+        android:layout_marginBottom="107dp"
         android:text="Next"
         android:visibility="gone" />
 

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+   >
+
+    <View
+        android:id="@+id/rectangle_1"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/baby_pink" />
+    <ImageView
+        android:id="@+id/settingsImg"
+        android:layout_width="56dp"
+        android:layout_height="53dp"
+        android:src="@drawable/settings"
+        android:onClick="onClick"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="settings"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"/>
+    <ImageView
+        android:id="@+id/yourProfile"
+        android:layout_width="98dp"
+        android:layout_height="105dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="151dp"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/profile_border"
+        android:clipToOutline="true"
+        android:contentDescription="student profile"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_pic" />
+
+    <!-- Add the "Years of Experience" text view above the buttons -->
+
+    <!-- Your existing code... -->
+
+    <TextView
+        android:id="@+id/txtusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rectangle_1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="68dp"
+        android:layout_marginEnd="204dp"
+        android:text="@string/username"
+        android:textColor="@color/black"
+        android:textSize="26dp" />
+
+    <TextView
+        android:id="@+id/tutorInfo"
+        android:layout_width="301dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginLeft="55dp"
+        android:layout_marginTop="196dp"
+        android:layout_marginBottom="16dp"
+        android:fontFamily="@font/inika"
+        android:gravity="top"
+        android:text="Specialised and qualification"
+        android:textColor="@android:color/darker_gray" />
+
+    <TextView
+        android:id="@+id/yearsOfExperience"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tutorInfo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="5dp"
+        android:text="Years of Experience"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btnEditProfile"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/yearsOfExperience"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="46dp"
+        android:layout_marginTop="15dp"
+        android:onClick="onClick"
+        android:text="Edit Profile"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btnShareProfile"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnEditProfile"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="204dp"
+        android:layout_marginTop="-48dp"
+        android:layout_toEndOf="@id/btnEditProfile"
+        android:onClick="onClick"
+        android:text="Share Profile"
+        android:textColor="@color/black" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnShareProfile"
+        android:layout_marginTop="16dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed">
+
+        <!-- Tabs for Community and Notes -->
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabCommunity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Community" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notes" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Add a ViewPager below the TabLayout -->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout"
+        android:layout_marginTop="8dp"/>
+
+
+
+
+
+</RelativeLayout>

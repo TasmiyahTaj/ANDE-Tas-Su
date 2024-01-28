@@ -1,0 +1,14 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="#00000000" /> <!-- Set the background color, or use transparent -->
+            <size android:width="100dp" android:height="100dp" /> <!-- Set the size to match the ImageView -->
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="oval">
+            <stroke android:color="#000000" android:width="2dp" /> <!-- Set the border color and width -->
+            <solid android:color="#00000000" /> <!-- Set the background color, or use transparent -->
+        </shape>
+    </item>
+</layer-list>

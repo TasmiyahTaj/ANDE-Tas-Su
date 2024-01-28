@@ -3,7 +3,20 @@ package com.example.studylink_studio_dit2b03;
 public class User {
     private String userid,email,username;
     private int roleid;
+    private String profilePicUrl;
+    private static User instance;
 
+    // Private constructor to prevent instantiation
+    private User() {
+    }
+
+    // Method to get the singleton instance
+    public static synchronized User getInstance() {
+        if (instance == null) {
+            instance = new User();
+        }
+        return instance;
+    }
     public User(String userid, String email, String username, int roleid) {
         this.userid = userid;
         this.email = email;
@@ -41,5 +54,31 @@ public class User {
 
     public void setRoleid(int roleid) {
         this.roleid = roleid;
+    }
+
+    public String getProfilePicUrl() {
+        return profilePicUrl;
+    }
+
+    public void setProfilePicUrl(String profilePicUrl) {
+        this.profilePicUrl = profilePicUrl;
+    }
+    private Student student;
+    private Tutor tutor;
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
+    public Tutor getTutor() {
+        return tutor;
+    }
+
+    public void setTutor(Tutor tutor) {
+        this.tutor = tutor;
     }
 }

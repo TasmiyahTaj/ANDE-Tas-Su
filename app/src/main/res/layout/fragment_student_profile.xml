@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <View
+        android:id="@+id/rectangle_1"
+        android:layout_width="match_parent"
+        android:layout_height="80dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@color/baby_pink" />
+
+    <ImageView
+        android:id="@+id/yourProfile"
+        android:layout_width="98dp"
+        android:layout_height="105dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="151dp"
+        android:layout_marginTop="34dp"
+        android:background="@drawable/profile_border"
+        android:clipToOutline="true"
+        android:contentDescription="student profile"
+        android:scaleType="centerCrop"
+        android:src="@drawable/profile_pic" />
+
+    <TextView
+        android:id="@+id/txtusername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rectangle_1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="81dp"
+        android:layout_marginEnd="204dp"
+        android:text="@string/username"
+        android:textColor="@color/black"
+
+        android:textSize="26dp" />
+
+    <TextView
+        android:id="@+id/schooltxt"
+        android:layout_width="171dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="109dp"
+        android:layout_marginTop="211dp"
+        android:layout_marginBottom="501dp"
+        android:fontFamily="@font/inika"
+
+        android:gravity="top"
+
+        android:text="School"
+        android:textColor="@android:color/darker_gray" />
+
+    <ImageView
+        android:id="@+id/settingsImg"
+        android:layout_width="56dp"
+        android:layout_height="53dp"
+        android:src="@drawable/settings"
+        android:onClick="onClick"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentTop="true"
+        android:contentDescription="settings"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"/>
+
+
+    <Button
+        android:id="@+id/btnEditProfile"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtusername"
+        android:layout_alignParentStart="true"
+        android:onClick="onClick"
+        android:layout_marginStart="33dp"
+        android:layout_marginTop="46dp"
+        android:text="Edit Profile"
+        android:textColor="@color/black" />
+
+    <Button
+        android:id="@+id/btnShareProfile"
+        style="@style/ButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/txtusername"
+        android:layout_alignParentStart="true"
+        android:layout_marginStart="200dp"
+        android:onClick="onClick"
+
+        android:layout_marginTop="46dp"
+        android:layout_toEndOf="@id/btnEditProfile"
+        android:text="Share Profile"
+        android:textColor="@color/black" />
+
+    <TextView
+        android:id="@+id/txtYourPosts"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Your Posts"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        android:layout_below="@id/btnEditProfile"
+
+        android:layout_marginTop="16dp"
+        android:layout_centerHorizontal="true"/>
+
+    <!-- Divider -->
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@id/txtYourPosts"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/darker_gray"/>
+</RelativeLayout>
