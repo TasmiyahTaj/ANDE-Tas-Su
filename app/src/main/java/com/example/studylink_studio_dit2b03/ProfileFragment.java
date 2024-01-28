@@ -47,7 +47,7 @@ public class ProfileFragment extends Fragment {
                 // Redirect to the login activity
                 Intent intent = new Intent(requireContext(), Login.class);
                 startActivity(intent);
-                requireActivity().finish(); // Optional: Finish the current activity to prevent going back to it
+                requireActivity().finish();
             }
         });
 
