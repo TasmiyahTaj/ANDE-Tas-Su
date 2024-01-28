@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
         } else {
             retrieveUserDetails(firebaseUser.getUid());
             setContentView(R.layout.activity_main);
-
+            getUserType();
             bottomNavigationView = findViewById(R.id.bottomNavigationView);
             getSupportFragmentManager().beginTransaction().replace(R.id.container, homeFragment).commit();
 
@@ -72,6 +72,37 @@ public class MainActivity extends AppCompatActivity {
                     return false;
                 }
             });
+        }
+    }
+
+
+    private void getUserType() {
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        FirebaseUser user = auth.getCurrentUser();
+
+        if (user != null) {
+            String userId = user.getUid();
+
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(userId)
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document != null && document.exists()) {
+                                int userType = document.getLong("roleid").intValue();
+                                postFragment.setUserType(userType);
+                                postFragment.setUserID(userId);
+
+                            } else {
+                                // Handle the case where the document is null or doesn't exist
+                                Log.e("MainActivity", "Document does not exist");
+                            }
+                        } else {
+                            // Handle the case where the task is not successful
+                            Log.e("MainActivity", "Failed to get user type", task.getException());
+                        }
+                    });
         }
     }
 

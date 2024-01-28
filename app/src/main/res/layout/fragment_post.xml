@@ -1,17 +1,111 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<!-- res/layout/fragment_post.xml -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".PostFragment">
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
+
+    <!-- Layout for Student -->
+    <LinearLayout
+        android:id="@+id/studentLayout"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Post"
-        android:textSize="26dp"
-        android:layout_gravity="center"
-        />
+        android:orientation="vertical"
+        android:visibility="gone">
 
-</RelativeLayout>
+        <EditText
+            android:id="@+id/titleEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Post Title" />
+
+        <EditText
+            android:id="@+id/bodyEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Post Body" />
+
+        <Button
+            android:id="@+id/createPostButtonStudent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Post" />
+    </LinearLayout>
+
+    <!-- Layout for Teacher -->
+    <LinearLayout
+        android:id="@+id/teacherLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <Button
+            android:id="@+id/createPostButtonTeacher"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Post" />
+
+        <Button
+            android:id="@+id/createCommunityButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Create Community" />
+
+        <!-- Layout for Creating Post -->
+        <LinearLayout
+            android:id="@+id/createPostLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/postTitleEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Post Title" />
+
+            <EditText
+                android:id="@+id/postBodyEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Post Body" />
+
+            <Button
+                android:id="@+id/confirmPostButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Confirm Post" />
+        </LinearLayout>
+
+        <!-- Layout for Creating Community -->
+        <LinearLayout
+            android:id="@+id/createCommunityLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <EditText
+                android:id="@+id/communityTitleEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Community Title" />
+
+            <EditText
+                android:id="@+id/communityDescriptionEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Community Description" />
+
+            <Button
+                android:id="@+id/confirmCommunityButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create Community" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>
