@@ -1,0 +1,34 @@
+<!-- fragment_community_page.xml -->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/communityTitleTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Community Title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginStart="16dp" />
+
+    <TextView
+        android:id="@+id/communityDescriptionTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/communityTitleTextView"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="Community Description" />
+
+    <TextView
+        android:id="@+id/memberCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/communityDescriptionTextView"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:text="Members: 0" />
+
+</RelativeLayout>
