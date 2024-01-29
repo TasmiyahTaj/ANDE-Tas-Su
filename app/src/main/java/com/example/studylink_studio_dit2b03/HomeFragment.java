@@ -134,21 +134,21 @@ public class HomeFragment extends Fragment {
     }
 
     private void handleCardClick(Community community) {
-//        Log.d("CardClick", "Clicked on community: " + community.getTitle());
-//
-//        // Create a bundle to pass data
-//        Bundle bundle = new Bundle();
-//        bundle.putString("communityTitle", community.getTitle());
-//        bundle.putString("communityDescription", community.getDescription());
-//        bundle.putInt("memberCount", community.getMemberCount());
-//
-//        // Create the destination fragment and set arguments
-//        Fragment communityFragment = new CommunityPageFragment();
-//        communityFragment.setArguments(bundle);
-//
-//        // Replace the current fragment with the destination fragment
-//        FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
-//        fm.replace(R.id.container, communityFragment).addToBackStack(null).commit();
+        Log.d("CardClick", "Clicked on community: " + community.getTitle());
+
+        // Create a bundle to pass data
+        Bundle bundle = new Bundle();
+        bundle.putString("communityTitle", community.getTitle());
+        bundle.putString("communityDescription", community.getDescription());
+        bundle.putInt("memberCount", community.getMemberCount());
+
+        // Create the destination fragment and set arguments
+        Fragment communityFragment = new CommunityPageFragment();
+        communityFragment.setArguments(bundle);
+
+        // Replace the current fragment with the destination fragment
+        FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+        fm.replace(R.id.container, communityFragment).addToBackStack(null).commit();
     }
 
 

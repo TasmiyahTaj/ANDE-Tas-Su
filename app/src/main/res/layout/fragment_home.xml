@@ -10,7 +10,7 @@
         android:id = "@+id/homepageTrending"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trending Community Servers"
+        android:text="Trending Communities"
         android:textSize="26dp"
         android:layout_marginTop="20dp"
         android:layout_marginLeft="10dp"
