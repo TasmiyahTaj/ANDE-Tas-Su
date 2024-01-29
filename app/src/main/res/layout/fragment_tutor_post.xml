@@ -1,0 +1,74 @@
+<!-- fragment_teacher_post.xml -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Common UI elements for both options -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Create Something"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Option 1: Sell Notes Button -->
+    <Button
+        android:id="@+id/btnSellNotes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Sell Notes"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Option 2: Create Community Button -->
+    <Button
+        android:id="@+id/btnCreateCommunity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Community"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Option 3: Create Question Button -->
+    <Button
+        android:id="@+id/btnCreateQuestion"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create Question"
+        android:layout_marginBottom="16dp"/>
+
+    <EditText
+        android:id="@+id/etCommunityTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Community Name"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:layout_marginBottom="8dp"/>
+
+
+    <!-- EditText for Community Description -->
+    <EditText
+        android:id="@+id/etCommunityDescription"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Community Description"
+        android:visibility="gone"
+        android:textColor="@color/black"
+        android:layout_marginBottom="8dp"/>
+
+    <!-- Create Button for Community -->
+    <Button
+        android:id="@+id/btnCreateNewCommunity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Create New Community"
+        android:visibility="gone"
+        android:layout_marginBottom="16dp"/>
+
+
+</LinearLayout>

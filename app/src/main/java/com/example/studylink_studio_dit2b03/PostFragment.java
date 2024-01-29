@@ -1,171 +1,132 @@
 package com.example.studylink_studio_dit2b03;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import java.util.Date;
 
-
 public class PostFragment extends Fragment {
-
-    private int userType;
-    private String userID;
-    private LinearLayout studentLayout, teacherLayout, createPostLayout, createCommunityLayout;
-    private EditText titleEditText, bodyEditText, postTitleEditText, postBodyEditText,
-            communityTitleEditText, communityDescriptionEditText;
-    private Button createPostButtonStudent, createPostButtonTeacher, createCommunityButton,
-            confirmPostButton, confirmCommunityButton;
-
+    User userInstance = User.getInstance();
+    EditText communityNameEditText,communityDescriptionEditText;
     public PostFragment() {
         // Required empty public constructor
     }
 
-    public static PostFragment newInstance(int userType, String userID) {
-        PostFragment fragment = new PostFragment();
-        Bundle args = new Bundle();
-        args.putInt("userType", userType);
-        args.putString("userID", userID);
-        fragment.setArguments(args);
-        return fragment;
-    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_post, container, false);
+        View view;
+        if (userInstance.getRoleid() == 1) {
+            return inflater.inflate(R.layout.fragment_student_post, container, false);
+        } else if (userInstance.getRoleid() == 2) {
+            view = inflater.inflate(R.layout.fragment_tutor_post, container, false);
 
-        // Initialize views
-        studentLayout = view.findViewById(R.id.studentLayout);
-        teacherLayout = view.findViewById(R.id.teacherLayout);
-        createPostLayout = view.findViewById(R.id.createPostLayout);
-        createCommunityLayout = view.findViewById(R.id.createCommunityLayout);
+            // Set click listener for the "Create Community" button
+            Button createCommunityButton = view.findViewById(R.id.btnCreateCommunity);
+            createCommunityButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Toggle visibility of the EditText fields for community name and description
+                    communityNameEditText = view.findViewById(R.id.etCommunityTitle);
+                    communityDescriptionEditText = view.findViewById(R.id.etCommunityDescription);
+                    Button createButton = view.findViewById(R.id.btnCreateNewCommunity);
 
-        titleEditText = view.findViewById(R.id.titleEditText);
-        bodyEditText = view.findViewById(R.id.bodyEditText);
-        postTitleEditText = view.findViewById(R.id.postTitleEditText);
-        postBodyEditText = view.findViewById(R.id.postBodyEditText);
-        communityTitleEditText = view.findViewById(R.id.communityTitleEditText);
-        communityDescriptionEditText = view.findViewById(R.id.communityDescriptionEditText);
+                    int visibility = communityNameEditText.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
 
-        createPostButtonStudent = view.findViewById(R.id.createPostButtonStudent);
-        createPostButtonTeacher = view.findViewById(R.id.createPostButtonTeacher);
-        createCommunityButton = view.findViewById(R.id.createCommunityButton);
-        confirmPostButton = view.findViewById(R.id.confirmPostButton);
-        confirmCommunityButton = view.findViewById(R.id.confirmCommunityButton);
+                    communityNameEditText.setVisibility(visibility);
+                    communityDescriptionEditText.setVisibility(visibility);
+                    createButton.setVisibility(visibility);
+                }
+            });
 
-        // Get user type
-        if (getArguments() != null) {
-            userType = getArguments().getInt("userType", 0);
-            userID = getArguments().getString("userID", null);
-        }
+            // Set click listener for the "Create" button
+            Button createButton = view.findViewById(R.id.btnCreateNewCommunity);
+            createButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String communityTitle = communityNameEditText.getText().toString();
+                    String communityDescription = communityDescriptionEditText.getText().toString();
+                    // Check if the community name and description are not empty
+                    if (!communityTitle.isEmpty() && !communityDescription.isEmpty()) {
+                        Community community=new Community();
+                        community.setTitle(communityTitle);
+                        community.setDescription(communityDescription);
+                        community.setCreatorId(userInstance.getUserid());
 
-        // Show/hide layouts based on user type
-        if (userType == 1) {
-            studentLayout.setVisibility(View.VISIBLE);
-            teacherLayout.setVisibility(View.GONE);
-        } else if (userType == 2) {
-            studentLayout.setVisibility(View.GONE);
-            teacherLayout.setVisibility(View.VISIBLE);
-        }
+                        Date creationDate=new Date(System.currentTimeMillis());
+                        community.setCreationTimestamp(creationDate);
+                        community.setMemberCount(1);
 
-        // Set click listeners for buttons
-        createPostButtonStudent.setOnClickListener(v -> createPost());
-        createPostButtonTeacher.setOnClickListener(v -> showCreatePostLayout());
-        createCommunityButton.setOnClickListener(v -> showCreateCommunityLayout());
-        confirmPostButton.setOnClickListener(v -> confirmPost());
-        confirmCommunityButton.setOnClickListener(v -> confirmCommunity());
 
-        return view;
-    }
+                        FirebaseFirestore.getInstance().collection("Community")
+                                .add(community)
+                                .addOnSuccessListener(documentReference->{
 
-    private void createPost() {
-        // Logic for creating post for students
-        // Retrieve data from titleEditText and bodyEditText
-    }
+                                    String communityId=documentReference.getId();
+                                    community.setCommunityId(communityId);
 
-    private void showCreatePostLayout() {
-        createPostLayout.setVisibility(View.VISIBLE);
-        createCommunityLayout.setVisibility(View.GONE);
-    }
+                                    documentReference.set(community)
+                                            .addOnSuccessListener(aVoid->{
 
-    private void showCreateCommunityLayout() {
-        createPostLayout.setVisibility(View.GONE);
-        createCommunityLayout.setVisibility(View.VISIBLE);
-    }
+                                                navigateToCommunityDetails(community);
+                                            })
+                                            .addOnFailureListener(e->{
 
-    private void confirmPost() {
-        // Logic for confirming post for teachers
-        // Retrieve data from postTitleEditText and postBodyEditText
-    }
-
-    private void confirmCommunity() {
-        // Retrieve data from communityTitleEditText and communityDescriptionEditText
-        String communityTitle = communityTitleEditText.getText().toString().trim();
-        String communityDescription = communityDescriptionEditText.getText().toString().trim();
-
-        // Check if the title and description are not empty
-        if (!communityTitle.isEmpty() && !communityDescription.isEmpty()) {
-            // Create a new Community object with the provided data
-            Community community = new Community();
-            community.setTitle(communityTitle);
-            community.setDescription(communityDescription);
-            community.setCreatorId(userID); // Replace with the actual creator ID
-
-            // Convert the long timestamp to a Date object
-            Date creationDate = new Date(System.currentTimeMillis());
-            community.setCreationTimestamp(creationDate);
-            community.setMemberCount(1); // Initial count including the creator
-
-            // Add the community document to the "Community" collection
-            FirebaseFirestore.getInstance().collection("Community")
-                    .add(community)
-                    .addOnSuccessListener(documentReference -> {
-                        // Document added successfully
-                        // Retrieve the generated communityId and set it in the community object
-                        String communityId = documentReference.getId();
-                        community.setCommunityId(communityId);
-
-                        // Now, update the document with the community object including the communityId
-                        documentReference.set(community)
-                                .addOnSuccessListener(aVoid -> {
-                                    // Document updated successfully
-                                    // For example, you might want to navigate to the community details page
-                                    // after successfully creating the community.
-                                    navigateToCommunityDetails(community);
+                                            });
                                 })
-                                .addOnFailureListener(e -> {
-                                    // Handle failure (document update failed)
-                                    // Handle errors or notify the user...
+                                .addOnFailureListener(e->{
+
                                 });
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle failure (document addition failed)
-                        // Handle errors or notify the user...
-                    });
-        } else {
-            // Display an error message or handle the case where the title or description is empty
+                    }
+
+                                 else {
+                        // Handle the case when either the name or description is empty
+                        Log.e("create new community", "Community name or description is empty");
+                    }
+                }
+            });
+
+            return view;
+        }  else {
+            Intent intent = new Intent(requireContext(), Login.class);
+            startActivity(intent);
+            requireActivity().finish();
+            // Return an empty view if the user is not logged in
+            return new View(requireContext());
         }
     }
 
+    private void navigateToCommunityDetails(Community community){
+        Log.d("creating new community completely done", "navigateToCommunityDetails: ");
+        Toast.makeText(requireContext(), "Community created successfully", Toast.LENGTH_SHORT).show();        Bundle bundle = new Bundle();
+        bundle.putString("communityTitle", community.getTitle());
+        bundle.putString("communityDescription", community.getDescription());
+        bundle.putInt("memberCount", community.getMemberCount());
 
-    public void setUserType(int userType) {
-        this.userType = userType;
+        // Create the destination fragment and set arguments
+        Fragment communityFragment = new CommunityPageFragment();
+        communityFragment.setArguments(bundle);
+
+        // Replace the current fragment with the destination fragment
+        FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+        fm.replace(R.id.container, communityFragment).addToBackStack(null).commit();
+
+
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
-    }
-    private void navigateToCommunityDetails(Community community) {
-        // Use community.getCommunityId() for navigation or further processing
-        // ...
-    }
+
 }
 
 
