@@ -134,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                     userInstance.setUserid(userId);
                     userInstance.setEmail(email);
                     userInstance.setUsername(username);
+                    Log.d("Main activity", "Profile "+ profileUrl);
                     if(profileUrl!=null){ userInstance.setProfilePicUrl(profileUrl);}
 
                     userInstance.setRoleid(roleId);
