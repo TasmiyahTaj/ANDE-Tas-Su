@@ -36,7 +36,8 @@ public class Settings extends AppCompatActivity {
             public void onClick(View view) {
                 // Sign out the user
                 auth.signOut();
-
+                userInstance.clearUserDetails();
+                User.resetInstance();
                 // Redirect to the login activity
                 Intent intent = new Intent(Settings.this, Login.class);
                 startActivity(intent);

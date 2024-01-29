@@ -9,6 +9,15 @@ public class User {
     // Private constructor to prevent instantiation
     private User() {
     }
+    public void clearUserDetails() {
+        userid = null;
+        email = null;
+        username = null;
+        profilePicUrl = null;
+        roleid = 0; // Set to default role or a value that represents not logged in
+        student = null;
+        tutor = null;
+    }
 
     // Method to get the singleton instance
     public static synchronized User getInstance() {
@@ -16,6 +25,9 @@ public class User {
             instance = new User();
         }
         return instance;
+    }
+    public static void resetInstance() {
+        instance = null;
     }
     public User(String userid, String email, String username, int roleid) {
         this.userid = userid;
