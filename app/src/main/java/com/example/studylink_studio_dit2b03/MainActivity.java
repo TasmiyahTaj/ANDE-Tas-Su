@@ -166,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
                 if (document.exists()) {
                     String institution = document.getString("institutionid");
                     String course = document.getString("courseid");
-Log.d("Main","found student "+institution);
+                    Log.d("Main","found student "+institution);
                     // Set student details in the singleton instance
                     userInstance.setStudent(new Student(userId, userInstance.getUsername(), institution, course));
                 } else {
@@ -201,7 +201,6 @@ Log.d("Main","found student "+institution);
             }
         });
     }
-
 
 
 }

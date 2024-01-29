@@ -23,8 +23,8 @@ public class Settings extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings);
         auth = FirebaseAuth.getInstance();
-         txtNameSettings = findViewById(R.id.txtNameSettings);
-         logoutButton=findViewById(R.id.logoutButton);
+        txtNameSettings = findViewById(R.id.txtNameSettings);
+        logoutButton=findViewById(R.id.logoutButton);
         firebaseUser = auth.getCurrentUser();
         User userInstance = User.getInstance();
         String username = userInstance.getUsername();

@@ -49,11 +49,11 @@ public class ProfileFragment extends Fragment {
             return inflater.inflate(R.layout.fragment_tutor_profile, container, false);
         }else{
 
-                Intent intent = new Intent(requireContext(), Login.class);
-                startActivity(intent);
-                requireActivity().finish();
-                // Return an empty view if the user is not logged in
-                return new View(requireContext());
+            Intent intent = new Intent(requireContext(), Login.class);
+            startActivity(intent);
+            requireActivity().finish();
+            // Return an empty view if the user is not logged in
+            return new View(requireContext());
 
         }
 
@@ -84,13 +84,21 @@ public class ProfileFragment extends Fragment {
                 String username = userInstance.getUsername();
                 String profileUrl = userInstance.getProfilePicUrl();
                 String school=userInstance.getStudent().getInstitutionid();
-Log.d("Student", "onViewCreated: Student Details - " + userInstance.getStudent());
+                Log.d("Student", "onViewCreated: Student Details - " + userInstance.getStudent());
                 profile_username.setText(username);
                 description.setText(school);
-                Uri imageUri = Uri.parse(profileUrl);
 
-                // Load the image using Picasso with the Uri
-                Picasso.get().load(imageUri).into(userProfile);
+
+                // Check if profileUrl is not null before parsing it as a Uri
+                if (profileUrl != null) {
+                    Uri imageUri = Uri.parse(profileUrl);
+
+                    // Load the image using Picasso with the Uri
+                    Picasso.get().load(imageUri).into(userProfile);
+                } else {
+                    // Handle the case where profileUrl is null
+                    Log.e("ProfileFragment", "Profile picture URL is null");
+                }
 
 
             }
@@ -106,10 +114,15 @@ Log.d("Student", "onViewCreated: Student Details - " + userInstance.getStudent()
                 String qualification = userInstance.getTutor().getQualification();
                 int yearsOfExperience = userInstance.getTutor().getYearsOfExperience();
 
-                Uri imageUri = Uri.parse(profileUrl);
+                if (profileUrl != null) {
+                    Uri imageUri = Uri.parse(profileUrl);
 
-                // Load the image using Picasso with the Uri
-                Picasso.get().load(imageUri).into(userProfile);
+                    // Load the image using Picasso with the Uri
+                    Picasso.get().load(imageUri).into(userProfile);
+                } else {
+                    // Handle the case where profileUrl is null
+                    Log.e("ProfileFragment", "Profile picture URL is null");
+                }
                 profile_username.setText(username);
 
                 // Convert yearsOfExperience to a string before concatenating
