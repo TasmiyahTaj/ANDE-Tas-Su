@@ -41,7 +41,7 @@ public class SignUpDetail extends AppCompatActivity{
     private String userId, username, email;
     private ImageView profile;
     User user;
-int roleid;
+    int roleid;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri profileImageUri;
     @Override
@@ -62,7 +62,7 @@ int roleid;
         teacherRadioButton = findViewById(R.id.teacherRadioButton);
         studentFieldsLayout = findViewById(R.id.studentFieldsLayout);
         teacherFieldsLayout = findViewById(R.id.teacherFieldsLayout);
-profile=findViewById(R.id.profileImageView);
+        profile=findViewById(R.id.profileImageView);
         // Populate spinners with data from Android Studio (dummy data for demonstration)
         populateInstitutionsSpinner();
         populateCoursesSpinner();
@@ -151,7 +151,7 @@ profile=findViewById(R.id.profileImageView);
     // Other methods (populateInstitutionsSpinner, populateCoursesSpinner, etc.) remain unchanged
     private void saveUserToDatabase() {
         // Save user information in the "users" table of your database
-         user = new User(userId, email, username, roleid);
+        user = new User(userId, email, username, roleid);
 
         FirebaseFirestore.getInstance().collection("users")
                 .document(userId)
