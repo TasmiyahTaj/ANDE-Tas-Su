@@ -41,12 +41,12 @@
 
     <TextView
         android:id="@+id/schooltxt"
-        android:layout_width="171dp"
+        android:layout_width="306dp"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="109dp"
+        android:layout_marginLeft="61dp"
         android:layout_marginTop="211dp"
         android:layout_marginBottom="501dp"
         android:fontFamily="@font/inika"
@@ -117,4 +117,12 @@
         android:layout_below="@id/txtYourPosts"
         android:layout_marginTop="8dp"
         android:background="@android:color/darker_gray"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/questionRecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/divider"
+        android:layout_marginTop="8dp"/>
+
 </RelativeLayout>
