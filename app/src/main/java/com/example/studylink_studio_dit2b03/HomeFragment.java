@@ -15,11 +15,14 @@ import androidx.fragment.app.Fragment;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class HomeFragment extends Fragment {
@@ -82,7 +85,7 @@ public class HomeFragment extends Fragment {
 
         return view;
     }
-
+    User userInstance = User.getInstance();
     private void loadTrendingCommunities() {
         // Fetch top 3 communities based on member count
         FirebaseFirestore.getInstance().collection("Community")
@@ -112,16 +115,97 @@ public class HomeFragment extends Fragment {
 
     private void setCommunityData(Community community, TextView titleTextView, TextView descriptionTextView, TextView memberCountTextView, Button joinButton) {
         // Set data for the card
+        String userId = userInstance.getUserid(); // Implement the method to get the current user's ID
+        if (userId != null) {
+            checkIfUserJoined(community, userId, joinButton);
+        }
         titleTextView.setText(community.getTitle());
-
         // Limit the length of the description to a certain number of characters
         int maxDescriptionLength = 25; // Set your desired maximum length
         String truncatedDescription = truncateText(community.getDescription(), maxDescriptionLength);
         descriptionTextView.setText(truncatedDescription);
         memberCountTextView.setText("Members: " + community.getMemberCount());
 
-        // You can set a click listener for the join button if needed
-        // joinButton.setOnClickListener(v -> handleJoinButtonClick(community));
+
+    }
+    private void checkIfUserJoined(Community community, String userId, Button joinButton) {
+        FirebaseFirestore.getInstance()
+                .collection("Community")
+                .document(community.getCommunityId())
+                .collection("members")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful() && task.getResult().exists()) {
+                        // User is already a member, update the button text
+                        joinButton.setText("JOINED");
+                        joinButton.setEnabled(false); // Optionally, disable the button
+                    } else {
+                        // User is not a member, set the join button click listener
+                        joinButton.setOnClickListener(v -> handleJoinButtonClick(community, joinButton));
+                    }
+                })
+                .addOnSuccessListener(documentSnapshot -> {
+                    // Move the UI update logic here, inside the success listener
+                    if (documentSnapshot.exists()) {
+                        // User is already a member, update the button text
+                        joinButton.setText("JOINED");
+                        joinButton.setEnabled(false); // Optionally, disable the button
+                    } else {
+                        // User is not a member, set the join button click listener
+                        joinButton.setOnClickListener(v -> handleJoinButtonClick(community, joinButton));
+                    }
+                });
+    }
+
+
+
+    private void handleJoinButtonClick(Community community, Button joinButton) {
+        // Add logic to save user ID in the community's members subcollection
+        String userId = userInstance.getUserid(); // Implement the method to get the current user's ID
+
+        if (userId != null) {
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            // Reference to the community document
+            DocumentReference communityRef = db.collection("Community").document(community.getCommunityId());
+
+            // Add the user to the members subcollection
+            db.runTransaction(transaction -> {
+                // Retrieve the current member count
+                DocumentSnapshot snapshot = transaction.get(communityRef);
+
+                // Check if the document exists and contains the "member_count" field
+                if (snapshot.exists() && snapshot.contains("memberCount")) {
+                    long currentMemberCount = snapshot.getLong("memberCount");
+
+                    // Update the member count and add the user to the subcollection
+                    transaction.update(communityRef, "memberCount", currentMemberCount + 1);
+                    transaction.set(communityRef.collection("members").document(userId), new HashMap<>());
+                } else {
+                    // Handle the case where the document doesn't exist or "member_count" is missing
+                    Log.e("JoinButtonClick", "Document doesn't exist or missing 'member_count' field");
+                }
+
+                return null;
+            }).addOnSuccessListener(aVoid -> {
+                // Update UI or show a success message if needed
+                Log.d("JoinButtonClick", "User joined community: " + community.getTitle());
+                // After joining, update the button text
+                joinButton.setText("JOINED");
+                joinButton.setEnabled(false); // Optionally, disable the button
+            }).addOnFailureListener(e -> {
+                // Handle the failure to join (e.g., display an error message)
+                Log.e("JoinButtonClick", "Failed to join community: " + community.getTitle(), e);
+            });
+        }
+    }
+
+    private Button getJoinButtonForCommunity(Community community) {
+        int communityIndex = trendingCommunities.indexOf(community);
+        if (communityIndex != -1 && communityIndex < joinButtons.size()) {
+            return joinButtons.get(communityIndex);
+        }
+        return null;
     }
 
     private String truncateText(String text, int maxLength) {
@@ -150,6 +234,4 @@ public class HomeFragment extends Fragment {
         FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
         fm.replace(R.id.container, communityFragment).addToBackStack(null).commit();
     }
-
-
 }
