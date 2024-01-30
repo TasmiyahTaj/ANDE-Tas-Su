@@ -1,0 +1,87 @@
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#F5F5F5">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <!-- Header -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Upload Note"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:textColor="#333333"
+            android:layout_marginBottom="16dp"/>
+
+        <!-- ImageView for PDF Attachment -->
+        <ImageView
+            android:id="@+id/uploadpdf"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            android:src="@drawable/pdf"
+            android:contentDescription="PDF Icon"/>
+
+        <TextView
+            android:id="@+id/contentTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="Choose pdf file!!"
+            android:gravity="center"
+            android:textColor="@android:color/black"/>
+
+        <TextView
+            android:id="@+id/chooseCommunity"
+            style="@style/TextInput"
+            android:hint="Select Community"
+            android:gravity="center_vertical"
+            android:drawableEnd="@drawable/ic_arrow"
+
+            />
+
+        <!-- EditText for Title -->
+        <EditText
+            android:id="@+id/editTextTitle"
+            style="@style/TextInput"
+            android:hint="Enter Title"/>
+
+        <!-- EditText for Content -->
+        <EditText
+            android:id="@+id/editTextContent"
+            style="@style/TextInput"
+            android:hint="Enter Content"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top"/>
+
+        <!-- EditText for Price -->
+        <EditText
+            android:id="@+id/editTextPrice"
+            style="@style/TextInput"
+            android:hint="Enter Price"
+            android:inputType="numberDecimal"/>
+
+
+        <!-- Horizontal LinearLayout for Image Attachment and Post Buttons -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="16dp">
+            <!-- Image Attachment Button -->
+            <Button
+                android:id="@+id/buttonPost"
+                style="@style/PrimaryButton"
+                android:text="Post"/>
+        </LinearLayout>
+
+    </LinearLayout>
+</ScrollView>
