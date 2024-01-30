@@ -60,6 +60,7 @@
             android:textColor="@android:color/black"
             android:backgroundTint="@android:color/darker_gray"
             android:hint="Select your Institution"
+            android:drawableEnd="@drawable/ic_arrow"
             android:padding="8dp" />
 
         <!-- Course Spinner -->
@@ -73,6 +74,7 @@
             android:textColor="@android:color/black"
             android:backgroundTint="@android:color/darker_gray"
             android:hint="Select your Course"
+            android:drawableEnd="@drawable/ic_arrow"
             android:padding="8dp" />
 
     </LinearLayout>
@@ -98,6 +100,7 @@
             android:textColor="@android:color/black"
             android:backgroundTint="@android:color/darker_gray"
             android:hint="Select your Highest Education"
+            android:drawableEnd="@drawable/ic_arrow"
             android:padding="8dp" />
 
         <!-- Specialized Course Spinner -->
@@ -111,6 +114,8 @@
             android:textColor="@android:color/black"
             android:backgroundTint="@android:color/darker_gray"
             android:hint="Select your Specialized Course"
+            android:drawableEnd="@drawable/ic_arrow"
+
             android:padding="8dp" />
 
         <!-- Work Experience Years EditText -->
@@ -122,6 +127,7 @@
             android:background="@android:color/white"
             android:hint="Enter your Work Experience (in years)"
             android:inputType="number"
+            android:textColor="@android:color/black"
             android:padding="8dp" />
 
     </LinearLayout>
