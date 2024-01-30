@@ -5,21 +5,74 @@
     android:orientation="vertical"
     android:padding="16dp">
 
-    <!-- Common UI elements for both options -->
+    <!-- Header -->
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Create Question"
-        android:textSize="18sp"
+        android:textSize="20sp"
         android:textStyle="bold"
         android:layout_marginBottom="16dp"/>
 
+    <!-- Search Community -->
+    <AutoCompleteTextView
+        android:id="@+id/chooseCommunity"
+        android:layout_width="392dp"
+        android:layout_height="63dp"
+        android:hint="Search for a community" />
 
-    <Button
-        android:id="@+id/btnCreateQuestion"
+    <Spinner
+        android:id="@+id/spinnerCommunity"
+        android:layout_width="389dp"
+        android:layout_height="49dp"
+        android:layout_below="@id/chooseCommunity"
+        android:layout_marginTop="16dp" />
+
+
+    <!-- Question Title -->
+    <EditText
+        android:id="@+id/editTextTitle"
+        android:layout_width="379dp"
+        android:layout_height="58dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Question Title"
+        android:inputType="textCapSentences"
+        android:textSize="16sp" />
+
+    <!-- Question Description -->
+    <EditText
+        android:id="@+id/editTextDescription"
+        android:layout_width="match_parent"
+        android:layout_height="345dp"
+        android:layout_marginBottom="16dp"
+        android:hint="Description"
+        android:inputType="textMultiLine"
+        android:textSize="16sp" />
+
+    <!-- Horizontal LinearLayout for Image Attachment and Post Buttons -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Question"
-        android:layout_marginBottom="16dp"/>
+        android:orientation="horizontal">
+
+        <!-- Image Attachment Button -->
+        <Button
+            android:id="@+id/buttonAttachImage"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:text="Attach Image" />
+        <Space
+            android:layout_width="16dp"
+            android:layout_height="1dp" />
+        <!-- Post Button -->
+        <Button
+            android:id="@+id/buttonPost"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Post"/>
+    </LinearLayout>
 
 </LinearLayout>

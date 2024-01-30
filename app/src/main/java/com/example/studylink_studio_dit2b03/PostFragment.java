@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -15,8 +17,12 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 public class PostFragment extends Fragment {
     User userInstance = User.getInstance();
@@ -30,8 +36,53 @@ public class PostFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view;
         if (userInstance.getRoleid() == 1) {
-            return inflater.inflate(R.layout.fragment_student_post, container, false);
-        } else if (userInstance.getRoleid() == 2) {
+            view = inflater.inflate(R.layout.fragment_student_post, container, false);
+            AutoCompleteTextView chooseCommunityTextView = view.findViewById(R.id.chooseCommunity);
+
+            // Fetch communities from Firestore
+            FirebaseFirestore.getInstance().collection("Community")
+                    .get()
+                    .addOnSuccessListener(queryDocumentSnapshots -> {
+                        List<Community> communities = new ArrayList<>();
+                        List<String> communityNames = new ArrayList<>();
+
+                        // Iterate through query results and populate lists
+                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                            Community community = document.toObject(Community.class);
+                            communities.add(community);
+                            communityNames.add(community.getTitle());
+                            Log.d("Community Names", "Number of communities: " + communityNames);
+
+                        }
+
+                        // Set up ArrayAdapter for AutoCompleteTextView
+                        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                                requireContext(),
+                                android.R.layout.simple_dropdown_item_1line,
+                                communityNames
+                        );
+
+                        // Set adapter for AutoCompleteTextView
+                        chooseCommunityTextView.setAdapter(adapter);
+
+                        // Set up OnItemClickListener for AutoCompleteTextView
+                        chooseCommunityTextView.setOnItemClickListener((parent, view1, position, id) -> {
+                            // Retrieve the selected community and perform actions
+                            Community selectedCommunity = communities.get(position);
+                            navigateToCommunityDetails(selectedCommunity);
+                        });
+                        Log.d("Community Names", "Number of communities: " + communityNames.size());
+
+                    })
+                    .addOnFailureListener(e -> {
+                        // Handle failure to fetch communities from Firebase
+                        Log.e("Fetch Communities", "Error getting communities", e);
+                    });
+
+            return view;
+        
+
+    } else if (userInstance.getRoleid() == 2) {
             view = inflater.inflate(R.layout.fragment_tutor_post, container, false);
 
             // Set click listener for the "Create Community" button
