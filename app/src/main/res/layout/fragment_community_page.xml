@@ -1,18 +1,22 @@
-<!-- fragment_community_page.xml -->
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    >
 
     <TextView
         android:id="@+id/communityTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Community Title"
+        android:text="CommunityTitle"
         android:textSize="18sp"
         android:textStyle="bold"
         android:textColor="@android:color/black"
         android:layout_marginTop="16dp"
-        android:layout_marginStart="16dp" />
+        android:layout_marginStart="16dp"/>
 
     <TextView
         android:id="@+id/communityDescriptionTextView"
@@ -22,7 +26,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
         android:textColor="@android:color/black"
-        android:text="Community Description" />
+        android:text="CommunityDescription"/>
 
     <TextView
         android:id="@+id/memberCountTextView"
@@ -32,6 +36,40 @@
         android:layout_below="@id/communityDescriptionTextView"
         android:layout_marginTop="8dp"
         android:layout_marginStart="16dp"
-        android:text="Members: 0" />
+        android:text="Members:0"/>
+
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/memberCountTextView"
+        android:layout_marginTop="16dp"
+        app:tabGravity="fill"
+        app:tabMode="fixed">
+
+        <!-- Tabs for Community and Notes -->
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabQuestions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Questions" />
+
+        <com.google.android.material.tabs.TabItem
+            android:id="@+id/tabNotes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Notes" />
+
+    </com.google.android.material.tabs.TabLayout>
+
+    <!-- Add a ViewPager below the TabLayout -->
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tabLayout"
+        android:layout_marginTop="8dp"/>
+
 
 </RelativeLayout>
