@@ -15,19 +15,16 @@
         android:layout_marginBottom="16dp"/>
 
     <!-- Search Community -->
-    <AutoCompleteTextView
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:id="@+id/chooseCommunity"
-        android:layout_width="392dp"
-        android:layout_height="63dp"
-        android:hint="Search for a community" />
-
-    <Spinner
-        android:id="@+id/spinnerCommunity"
-        android:layout_width="389dp"
-        android:layout_height="49dp"
-        android:layout_below="@id/chooseCommunity"
-        android:layout_marginTop="16dp" />
-
+        android:hint="Select course"
+        android:padding="12dp"
+        android:gravity="center_vertical"
+        android:drawableEnd="@drawable/ic_arrow"
+        android:background="@android:drawable/editbox_background"
+        />
 
     <!-- Question Title -->
     <EditText
@@ -42,8 +39,8 @@
     <!-- Question Description -->
     <EditText
         android:id="@+id/editTextDescription"
-        android:layout_width="match_parent"
-        android:layout_height="345dp"
+        android:layout_width="386dp"
+        android:layout_height="332dp"
         android:layout_marginBottom="16dp"
         android:hint="Description"
         android:inputType="textMultiLine"
