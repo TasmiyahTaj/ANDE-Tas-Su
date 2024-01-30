@@ -203,10 +203,8 @@ public class PostFragment extends Fragment  {
 
     private void navigateToCommunityDetails(Community community){
       Bundle bundle = new Bundle();
-        bundle.putString("communityTitle", community.getTitle());
-        bundle.putString("communityDescription", community.getDescription());
-        bundle.putInt("memberCount", community.getMemberCount());
-
+        bundle.putString("communityID", community.getCommunityId());
+        Log.d("communityID", community.getCommunityId());
         // Create the destination fragment and set arguments
         Fragment communityFragment = new CommunityPageFragment();
         communityFragment.setArguments(bundle);

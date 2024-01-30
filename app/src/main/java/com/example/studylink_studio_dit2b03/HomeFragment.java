@@ -222,10 +222,7 @@ public class HomeFragment extends Fragment {
 
         // Create a bundle to pass data
         Bundle bundle = new Bundle();
-        bundle.putString("communityTitle", community.getTitle());
-        bundle.putString("communityDescription", community.getDescription());
-        bundle.putInt("memberCount", community.getMemberCount());
-
+        bundle.putString("communityID", community.getCommunityId());
         // Create the destination fragment and set arguments
         Fragment communityFragment = new CommunityPageFragment();
         communityFragment.setArguments(bundle);
