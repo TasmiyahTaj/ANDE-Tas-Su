@@ -1,15 +1,23 @@
 package com.example.studylink_studio_dit2b03;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
@@ -24,65 +32,87 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class PostFragment extends Fragment {
+public class PostFragment extends Fragment  {
     User userInstance = User.getInstance();
     EditText communityNameEditText,communityDescriptionEditText;
     public PostFragment() {
         // Required empty public constructor
     }
-
+    Dialog dialog;
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view;
         if (userInstance.getRoleid() == 1) {
             view = inflater.inflate(R.layout.fragment_student_post, container, false);
-            AutoCompleteTextView chooseCommunityTextView = view.findViewById(R.id.chooseCommunity);
+            TextView chooseCommunityTextView = view.findViewById(R.id.chooseCommunity);
+            chooseCommunityTextView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    dialog = new Dialog(requireContext());
+                    dialog.setContentView(R.layout.community_spinner);
+                    dialog.getWindow().setLayout(1050, 2000);
+                    dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+                    dialog.show();
 
-            // Fetch communities from Firestore
-            FirebaseFirestore.getInstance().collection("Community")
-                    .get()
-                    .addOnSuccessListener(queryDocumentSnapshots -> {
-                        List<Community> communities = new ArrayList<>();
-                        List<String> communityNames = new ArrayList<>();
+                    EditText communitySearch = dialog.findViewById(R.id.communitySearch);
+                    ListView communityList = dialog.findViewById(R.id.communityList);
 
-                        // Iterate through query results and populate lists
-                        for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
-                            Community community = document.toObject(Community.class);
-                            communities.add(community);
-                            communityNames.add(community.getTitle());
-                            Log.d("Community Names", "Number of communities: " + communityNames);
+                    FirebaseFirestore.getInstance().collection("Community")
+                            .get()
+                            .addOnSuccessListener(queryDocumentSnapshots -> {
+                                List<Community> communities = new ArrayList<>();
+                                List<String> communityNames = new ArrayList<>();
 
-                        }
+                                for (QueryDocumentSnapshot document : queryDocumentSnapshots) {
+                                    Community community = document.toObject(Community.class);
+                                    communities.add(community);
+                                    communityNames.add(community.getTitle());
+                                    Log.d("Community Names", "Number of communities: " + communityNames);
+                                }
 
-                        // Set up ArrayAdapter for AutoCompleteTextView
-                        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                                requireContext(),
-                                android.R.layout.simple_dropdown_item_1line,
-                                communityNames
-                        );
+                                ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                                        requireContext(),
+                                        android.R.layout.simple_dropdown_item_1line,
+                                        communityNames
+                                );
+                                communityList.setAdapter(adapter);
 
-                        // Set adapter for AutoCompleteTextView
-                        chooseCommunityTextView.setAdapter(adapter);
+                                communitySearch.addTextChangedListener(new TextWatcher() {
+                                    @Override
+                                    public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
-                        // Set up OnItemClickListener for AutoCompleteTextView
-                        chooseCommunityTextView.setOnItemClickListener((parent, view1, position, id) -> {
-                            // Retrieve the selected community and perform actions
-                            Community selectedCommunity = communities.get(position);
-                            navigateToCommunityDetails(selectedCommunity);
-                        });
-                        Log.d("Community Names", "Number of communities: " + communityNames.size());
+                                    @Override
+                                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                                        adapter.getFilter().filter(s);
+                                    }
 
-                    })
-                    .addOnFailureListener(e -> {
-                        // Handle failure to fetch communities from Firebase
-                        Log.e("Fetch Communities", "Error getting communities", e);
-                    });
+                                    @Override
+                                    public void afterTextChanged(Editable s) {}
+                                });
+
+                                communityList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                        // when item selected from list
+                                        // set selected item on textView
+                                        chooseCommunityTextView.setText(adapter.getItem(position));
+
+                                        // Dismiss dialog
+                                        if (dialog != null && dialog.isShowing()) {
+                                            dialog.dismiss();
+                                        }
+                                    }
+                                });
+                            })
+                            .addOnFailureListener(e -> {
+                                // Handle failure to fetch communities from Firebase
+                                Log.e("Fetch Communities", "Error getting communities", e);
+                            });
+                }
+            });
 
             return view;
-        
-
-    } else if (userInstance.getRoleid() == 2) {
+        }else if (userInstance.getRoleid() == 2) {
             view = inflater.inflate(R.layout.fragment_tutor_post, container, false);
 
             // Set click listener for the "Create Community" button
