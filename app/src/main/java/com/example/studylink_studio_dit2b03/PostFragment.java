@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -205,44 +206,55 @@ private EditText title, description;
                 public void onClick(View v) {
                     String communityTitle = communityNameEditText.getText().toString();
                     String communityDescription = communityDescriptionEditText.getText().toString();
+
                     // Check if the community name and description are not empty
                     if (!communityTitle.isEmpty() && !communityDescription.isEmpty()) {
-                        Community community=new Community();
+                        Community community = new Community();
                         community.setTitle(communityTitle);
                         community.setDescription(communityDescription);
                         community.setCreatorId(userInstance.getUserid());
 
-                        Date creationDate=new Date(System.currentTimeMillis());
+                        Date creationDate = new Date(System.currentTimeMillis());
                         community.setCreationTimestamp(creationDate);
                         community.setMemberCount(1);
 
-
+                        // Add the community to the 'Community' collection
                         FirebaseFirestore.getInstance().collection("Community")
                                 .add(community)
-                                .addOnSuccessListener(documentReference->{
-
-                                    String communityId=documentReference.getId();
+                                .addOnSuccessListener(documentReference -> {
+                                    String communityId = documentReference.getId();
                                     community.setCommunityId(communityId);
 
+                                    // Set the community document with the updated community ID
                                     documentReference.set(community)
-                                            .addOnSuccessListener(aVoid->{
-
-                                                navigateToCommunityDetails(community);
+                                            .addOnSuccessListener(aVoid -> {
+                                                // Create the 'members' subcollection for the community
+                                                FirebaseFirestore.getInstance().collection("Community")
+                                                        .document(communityId)
+                                                        .collection("members")
+                                                        .document(userInstance.getUserid())
+                                                        .set(new HashMap<>())
+                                                        .addOnSuccessListener(aVoid1 -> {
+                                                            // Navigate to community details after successfully creating the community and 'members' subcollection
+                                                            navigateToCommunityDetails(community);
+                                                        })
+                                                        .addOnFailureListener(e -> {
+                                                            // Handle failure to create 'members' subcollection
+                                                        });
                                             })
-                                            .addOnFailureListener(e->{
-
+                                            .addOnFailureListener(e -> {
+                                                // Handle failure to update the community document with the community ID
                                             });
                                 })
-                                .addOnFailureListener(e->{
-
+                                .addOnFailureListener(e -> {
+                                    // Handle failure to add the community document
                                 });
-                    }
-
-                                 else {
+                    } else {
                         // Handle the case when either the name or description is empty
                         Log.e("create new community", "Community name or description is empty");
                     }
                 }
+
             });
 
             return view;
@@ -256,8 +268,7 @@ private EditText title, description;
     }
 
     private void navigateToCommunityDetails(Community community){
-        Log.d("creating new community completely done", "navigateToCommunityDetails: ");
-        Toast.makeText(requireContext(), "Community created successfully", Toast.LENGTH_SHORT).show();        Bundle bundle = new Bundle();
+      Bundle bundle = new Bundle();
         bundle.putString("communityTitle", community.getTitle());
         bundle.putString("communityDescription", community.getDescription());
         bundle.putInt("memberCount", community.getMemberCount());
