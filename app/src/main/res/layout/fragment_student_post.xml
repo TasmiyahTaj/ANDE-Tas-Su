@@ -12,6 +12,7 @@
         android:text="Create Question"
         android:textSize="20sp"
         android:textStyle="bold"
+        android:textColor="@android:color/black"
         android:layout_marginBottom="16dp"/>
 
     <!-- Search Community -->
@@ -19,12 +20,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/chooseCommunity"
-        android:hint="Select course"
+        android:textColor="@android:color/black"
+        android:hint="Select Community"
         android:padding="12dp"
         android:gravity="center_vertical"
         android:drawableEnd="@drawable/ic_arrow"
         android:background="@android:drawable/editbox_background"
         />
+
+    <!-- Text label for Question Title -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Title:"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="16dp"/>
 
     <!-- Question Title -->
     <EditText
@@ -33,18 +43,63 @@
         android:layout_height="58dp"
         android:layout_marginBottom="16dp"
         android:hint="Question Title"
+        android:textColorHint="@android:color/darker_gray"
+        android:textColor="@android:color/black"
         android:inputType="textCapSentences"
         android:textSize="16sp" />
+
+    <!-- Text label for Question Description -->
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Description:"
+        android:textColor="@android:color/black"
+        android:layout_marginTop="16dp"/>
 
     <!-- Question Description -->
     <EditText
         android:id="@+id/editTextDescription"
-        android:layout_width="386dp"
-        android:layout_height="332dp"
+        android:layout_width="391dp"
+        android:layout_height="91dp"
         android:layout_marginBottom="16dp"
         android:hint="Description"
         android:inputType="textMultiLine"
+        android:textColor="@android:color/black"
+        android:textColorHint="@android:color/darker_gray"
         android:textSize="16sp" />
+
+    <!-- ImageView to display attached image -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:visibility="visible"
+        android:layout_gravity="center_horizontal">
+
+        <!-- Image View -->
+        <ImageView
+            android:id="@+id/attachedImage"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="10dp"
+            android:visibility="gone"
+            android:layout_gravity="center_horizontal"
+            android:scaleType="centerCrop"/>
+
+        <!-- Button with Red Cross for Removing Image -->
+        <!-- Button with Red Cross for Removing Image -->
+        <Button
+            android:id="@+id/buttonRemoveImage"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_margin="8dp"
+            android:visibility="gone"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/ic_red_cross"/>
+
+    </RelativeLayout>
+
 
     <!-- Horizontal LinearLayout for Image Attachment and Post Buttons -->
     <LinearLayout
