@@ -6,6 +6,8 @@ public class Question {
     private String title;
     private String description;
     private String questionImageUrl;
+    private String tutorName;
+    private String communityName;
 
     public Question(String userID, String communityID, String title, String description) {
         this.userID = userID;
@@ -18,7 +20,28 @@ public class Question {
     public Question() {
 
     }
+    public String getTutorName() {
+        return tutorName;
+    }
 
+    public void setTutorName(String tutorName) {
+        this.tutorName = tutorName;
+    }
+    public Question(String userID, String communityName, String title, String description, String tutorName) {
+        this.userID = userID;
+        this.communityName = communityName;
+        this.title = title;
+        this.description = description;
+        this.tutorName = tutorName;
+    }
+    public Question(String userID, String communityName, String title, String description, String tutorName, String questionImage) {
+        this.userID = userID;
+        this.communityName = communityName;
+        this.title = title;
+        this.description = description;
+        this.tutorName = tutorName;
+        this.questionImageUrl = questionImage;
+    }
     public String getUserID() {
         return userID;
     }
@@ -57,5 +80,13 @@ public class Question {
 
     public void setQuestionImageUrl(String questionImageUrl) {
         this.questionImageUrl = questionImageUrl;
+    }
+
+    public String getCommunityName() {
+        return communityName;
+    }
+
+    public void setCommunityName(String communityName) {
+        this.communityName = communityName;
     }
 }

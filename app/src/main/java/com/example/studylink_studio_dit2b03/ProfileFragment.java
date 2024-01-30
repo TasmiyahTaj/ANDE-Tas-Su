@@ -14,14 +14,21 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import android.net.Uri;
+
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.squareup.picasso.Picasso;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.Nullable;
 
@@ -34,6 +41,7 @@ public class ProfileFragment extends Fragment {
     private ImageView userProfile;
     User userInstance = User.getInstance();
     View view;
+    private List<Question> questionList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -83,11 +91,10 @@ public class ProfileFragment extends Fragment {
                 description = view.findViewById(R.id.schooltxt);
                 String username = userInstance.getUsername();
                 String profileUrl = userInstance.getProfilePicUrl();
-                String school=userInstance.getStudent().getInstitutionid();
+                String school = userInstance.getStudent().getInstitutionid();
                 Log.d("Student", "onViewCreated: Student Details - " + userInstance.getStudent());
                 profile_username.setText(username);
                 description.setText(school);
-
 
                 // Check if profileUrl is not null before parsing it as a Uri
                 if (profileUrl != null) {
@@ -100,9 +107,77 @@ public class ProfileFragment extends Fragment {
                     Log.e("ProfileFragment", "Profile picture URL is null");
                 }
 
+                QuestionAdapter adapter = new QuestionAdapter(questionList);
+                RecyclerView recyclerView = view.findViewById(R.id.questionRecyclerView);
+                recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                recyclerView.setAdapter(adapter);
+
+
+                FirebaseFirestore db = FirebaseFirestore.getInstance();
+                // Capture user ID before Firestore queries
+                String currentUserId = userInstance.getUserid();
+
+// Query questions collection
+                db.collection("Questions")
+                        .whereEqualTo("userID", currentUserId)
+                        .get()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                // Clear the existing questionList
+                                questionList.clear();
+
+                                // Iterate through the result and populate your RecyclerView adapter
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    // Extract question details and add them to your RecyclerView adapter
+                                    String title = document.getString("title");
+                                    String description = document.getString("description");
+                                    String communityId = document.getString("communityID");
+                                    String questionImage = document.getString("questionImageUrl");
+
+
+                                    // Retrieve community title and tutor ID
+                                    db.collection("Community")
+                                            .document(communityId)
+                                            .get()
+                                            .addOnSuccessListener(communitySnapshot -> {
+                                                if (communitySnapshot.exists()) {
+                                                    String communityTitle = communitySnapshot.getString("title");
+                                                    String tutorId = communitySnapshot.getString("creatorId");
+
+                                                    // Retrieve tutor name
+                                                    db.collection("Tutor")
+                                                            .document(tutorId)
+                                                            .get()
+                                                            .addOnSuccessListener(tutorSnapshot -> {
+                                                                if (tutorSnapshot.exists()) {
+                                                                    String tutorName = tutorSnapshot.getString("username");
+                                                                    // Add the question to the list
+                                                                    if(questionImage!=null){
+                                                                        questionList.add(new Question(currentUserId, communityTitle, title, description, tutorName,questionImage));
+
+                                                                    }else{         questionList.add(new Question(currentUserId, communityTitle, title, description, tutorName));}
+
+                                                                    Log.e("ProfileFragment", "question by me " + questionList.size() + title + tutorName);
+
+                                                                    // Ensure UI updates are on the main thread
+                                                                    requireActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
+                                                                }
+                                                            });
+                                                }
+                                            });
+
+                                }
+                            } else {
+                                Log.e("Firestore", "Error getting questions", task.getException());
+                            }
+                        });
 
             }
-        } else if (userInstance.getRoleid() == 2) {
+        }
+
+
+
+        else if (userInstance.getRoleid() == 2) {
             Tutor tutor = userInstance.getTutor();
             if (tutor != null) {
                 description = view.findViewById(R.id.tutorInfo);
