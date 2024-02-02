@@ -1,4 +1,5 @@
 package com.example.studylink_studio_dit2b03;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -6,16 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-import java.util.ArrayList;
-import java.util.List;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import java.util.ArrayList;
+import java.util.List;
 
 public class NotesFragment extends Fragment {
+
     private RecyclerView recyclerView;
     private NoteAdapter noteAdapter;
 
@@ -29,24 +29,45 @@ public class NotesFragment extends Fragment {
         noteAdapter = new NoteAdapter();
         recyclerView.setAdapter(noteAdapter);
 
+        // Set click listener for the NoteAdapter
+        noteAdapter.setOnNoteItemClickListener(note -> {
+            // Handle item click, navigate to NoteDetailFragment
+            navigateToNoteDetail(note);
+        });
+
         Bundle args = getArguments();
         if (args != null) {
             String communityID = args.getString("communityID");
-            Log.d("communityid",communityID );
+            Log.d("communityid", communityID);
             new FetchNotesTask().execute(communityID);
+        } else {
+            Log.d("communityid", "no data");
         }
-        else{
-            Log.d("communityid","no data" );
-        }
-
 
         return view;
     }
 
-    private class FetchNotesTask extends AsyncTask<String, Void, List<String>> {
+    // Code for navigating to NoteDetailFragment in NotesFragment
+    private void navigateToNoteDetail(Note note) {
+        NoteDetailFragment noteDetailFragment = new NoteDetailFragment();
+
+        // Pass the clicked note to NoteDetailFragment
+        Bundle args = new Bundle();
+        args.putSerializable("note", note);
+        noteDetailFragment.setArguments(args);
+
+        // Use FragmentTransaction to replace the current fragment with NoteDetailFragment
+        requireActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, noteDetailFragment)  // Update the id here
+                .addToBackStack(null)
+                .commit();
+    }
+
+
+    private class FetchNotesTask extends AsyncTask<String, Void, List<Note>> {
 
         @Override
-        protected List<String> doInBackground(String... params) {
+        protected List<Note> doInBackground(String... params) {
             String communityID = params[0];
 
             // Fetch notes data from Firestore
@@ -54,20 +75,19 @@ public class NotesFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(List<String> noteIDs) {
-            // Update your UI with the fetched note IDs
+        protected void onPostExecute(List<Note> notes) {
+            // Update your UI with the fetched notes
             // This runs on the UI thread
 
             if (noteAdapter != null) {
-                noteAdapter.setNoteIDs(noteIDs);
+                noteAdapter.setNotes(notes);
             } else {
-                Log.d("Fetched Note ID", "Note IDs list is null");
+                Log.d("Fetched Notes", "Notes list is null");
             }
         }
 
-
-        private List<String> fetchNotesDataFromFirestore(String communityID) {
-            List<String> noteIDs = new ArrayList<>();
+        private List<Note> fetchNotesDataFromFirestore(String communityID) {
+            List<Note> notes = new ArrayList<>();
 
             // Initialize Firestore
             FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -79,18 +99,18 @@ public class NotesFragment extends Fragment {
                     .addOnCompleteListener(task -> {
                         if (task.isSuccessful()) {
                             for (QueryDocumentSnapshot document : task.getResult()) {
-                                // Retrieve data from each document and add it to the notesData list
-                                noteIDs.add(document.getString("content"));
+                                // Retrieve data from each document and create a Note object
+                                Note note = document.toObject(Note.class);
+                                notes.add(note);
                             }
+                            // Call onPostExecute to update the UI with the fetched data
+                            onPostExecute(notes);
                         } else {
                             Log.d("FetchNotesTask", "Error getting documents: ", task.getException());
                         }
-
-                        // Call onPostExecute to update the UI with the fetched data
-                        onPostExecute(noteIDs);
                     });
 
-            return noteIDs;
+            return notes;
         }
     }
 }

@@ -1,8 +1,9 @@
 package com.example.studylink_studio_dit2b03;
 
 import java.util.Date;
+import java.io.Serializable;
 
-public class Note {
+public class Note implements Serializable {
     private String noteId;
     private String title;
     private String content;
@@ -10,6 +11,7 @@ public class Note {
     private String communityId; // Assuming this is the ID of the community associated with the note
     private double price;
     private String attachmentUrl; // URL or reference to the attachment file
+
 
     // Default constructor
     public Note() {

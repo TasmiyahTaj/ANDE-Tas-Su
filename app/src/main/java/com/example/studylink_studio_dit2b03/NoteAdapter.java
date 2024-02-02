@@ -12,7 +12,7 @@ import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
-    private List<String> noteIDs = new ArrayList<>(); // Update this to match your data model
+    private List<Note> notes = new ArrayList<>(); // Update this to match your data model
 
     // ViewHolder class
     static class NoteViewHolder extends RecyclerView.ViewHolder {
@@ -23,6 +23,18 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             textNoteID = itemView.findViewById(R.id.textNoteID);
             // Add more TextViews or UI elements as needed for your notes
         }
+    }
+
+    // Click listener interface
+    public interface OnNoteItemClickListener {
+        void onNoteItemClick(Note note);
+    }
+
+    private OnNoteItemClickListener onNoteItemClickListener;
+
+    // Setter method for click listener
+    public void setOnNoteItemClickListener(OnNoteItemClickListener listener) {
+        this.onNoteItemClickListener = listener;
     }
 
     // onCreateViewHolder method
@@ -36,20 +48,27 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     // onBindViewHolder method
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
-        String noteID = noteIDs.get(position);
-        holder.textNoteID.setText(noteID);
+        Note note = notes.get(position);
+        holder.textNoteID.setText(note.getTitle()); // Assuming getTitle() returns the title of the note
         // Bind other data to UI elements here
+
+        // Set click listener for the item
+        holder.itemView.setOnClickListener(view -> {
+            if (onNoteItemClickListener != null) {
+                onNoteItemClickListener.onNoteItemClick(note);
+            }
+        });
     }
 
     // getItemCount method
     @Override
     public int getItemCount() {
-        return noteIDs.size();
+        return notes.size();
     }
 
     // Helper method to update data
-    void setNoteIDs(List<String> noteIDs) {
-        this.noteIDs = noteIDs;
+    void setNotes(List<Note> notes) {
+        this.notes = notes;
         notifyDataSetChanged();
     }
 }

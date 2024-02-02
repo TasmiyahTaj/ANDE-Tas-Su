@@ -36,16 +36,16 @@ public class CommunityPageFragment extends Fragment {
             retrieveCommunityData(communityID);
 
 
-        // Find UI elements
-        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        ViewPager viewPager = view.findViewById(R.id.viewPager);
+            // Find UI elements
+            TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+            ViewPager viewPager = view.findViewById(R.id.viewPager);
 
-        // Set up ViewPager and attach adapter
-        CommunityPagerAdapter pagerAdapter = new CommunityPagerAdapter(getChildFragmentManager(), communityID);
-        viewPager.setAdapter(pagerAdapter);
+            // Set up ViewPager and attach adapter
+            CommunityPagerAdapter pagerAdapter = new CommunityPagerAdapter(getChildFragmentManager(), communityID);
+            viewPager.setAdapter(pagerAdapter);
 
-        // Link the TabLayout to the ViewPager
-        tabLayout.setupWithViewPager(viewPager);
+            // Link the TabLayout to the ViewPager
+            tabLayout.setupWithViewPager(viewPager);
         }
         return view;
     }
