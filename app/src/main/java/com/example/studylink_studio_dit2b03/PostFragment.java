@@ -414,7 +414,7 @@ private EditText title, description;
                             question.setCommunityID(communityId);
                             question.setTitle(givenTitle);
                             question.setDescription(givenDescription);
-
+                            question.setCreatedAt(new Timestamp(new Date()).toDate());
                             // Check if an image is selected
                             if (selectedImageUri != null) {
                                 // Upload the image and set the URL in the callback

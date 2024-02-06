@@ -22,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import android.net.Uri;
 
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.squareup.picasso.Picasso;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -120,6 +121,7 @@ public class ProfileFragment extends Fragment {
 // Query questions collection
                 db.collection("Questions")
                         .whereEqualTo("userID", currentUserId)
+//                        .orderBy("createdAt", Query.Direction.DESCENDING)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {

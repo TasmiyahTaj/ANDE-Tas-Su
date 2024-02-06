@@ -1,5 +1,7 @@
 package com.example.studylink_studio_dit2b03;
 
+import java.util.Date;
+
 public class Question {
     private String userID;
     private String communityID;
@@ -9,6 +11,8 @@ public class Question {
     private String tutorName;
     private String communityName;
 
+    private int replyCount;
+private Date createdAt;
     public Question(String userID, String communityID, String title, String description) {
         this.userID = userID;
         this.communityID = communityID;
@@ -88,5 +92,21 @@ public class Question {
 
     public void setCommunityName(String communityName) {
         this.communityName = communityName;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public int getReplyCount() {
+        return replyCount;
+    }
+
+    public void setReplyCount(int replyCount) {
+        this.replyCount = replyCount;
     }
 }
