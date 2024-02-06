@@ -31,7 +31,7 @@ public class NoteDetailFragment extends Fragment {
 
                 titleTextView.setText(note.getTitle());
                 contentTextView.setText(note.getContent());
-                priceTextView.setText(String.valueOf(note.getPrice())); // Assuming price is a double
+                priceTextView.setText("Price: " +String.valueOf(note.getPrice())); // Assuming price is a double
             }
         }
 
