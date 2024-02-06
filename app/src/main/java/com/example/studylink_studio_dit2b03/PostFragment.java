@@ -56,14 +56,15 @@ import javax.annotation.Nullable;
 public class PostFragment extends Fragment  {
     User userInstance = User.getInstance();
     EditText communityNameEditText,communityDescriptionEditText;
+    Button createButton;
     private static final int GALLERY_REQUEST_CODE = 1;
     private static final int CAMERA_REQUEST_CODE = 2;
 
     private ImageView attachedImage;
     private Uri selectedImageUri;
-private      TextView chooseCommunityTextView;
-private Button buttonRemoveImage;
-private EditText title, description;
+    private TextView chooseCommunityTextView, noteTitleLabelTextView, noteContentLabelEditText, notePriceLabelEditText;
+    private Button buttonRemoveImage;
+    private EditText title, description, noteTitleEditText, noteContentTextView, notePriceTextView;
     public PostFragment() {
         // Required empty public constructor
     }
@@ -181,6 +182,17 @@ private EditText title, description;
         }else if (userInstance.getRoleid() == 2) {
             view = inflater.inflate(R.layout.fragment_tutor_post, container, false);
 
+
+            Button createNoteButton = view.findViewById(R.id.btnSellNotes);
+            createNoteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment uploadNoteFragment = new UploadNoteFragment();
+                    FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                    fm.replace(R.id.container, uploadNoteFragment).addToBackStack(null).commit();
+                }
+            });
+
             // Set click listener for the "Create Community" button
             Button createCommunityButton = view.findViewById(R.id.btnCreateCommunity);
             createCommunityButton.setOnClickListener(new View.OnClickListener() {
@@ -189,10 +201,10 @@ private EditText title, description;
                     // Toggle visibility of the EditText fields for community name and description
                     communityNameEditText = view.findViewById(R.id.etCommunityTitle);
                     communityDescriptionEditText = view.findViewById(R.id.etCommunityDescription);
-                    Button createButton = view.findViewById(R.id.btnCreateNewCommunity);
+                    createButton = view.findViewById(R.id.btnCreateNewCommunity);
+
 
                     int visibility = communityNameEditText.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE;
-
                     communityNameEditText.setVisibility(visibility);
                     communityDescriptionEditText.setVisibility(visibility);
                     createButton.setVisibility(visibility);
@@ -388,6 +400,7 @@ private EditText title, description;
                     // You may want to log the error or show a message to the user
                 });
     }
+
     private void onPostButtonClick() {
         // Get the selected community, title, description, and question image URI
         String selectedCommunity = chooseCommunityTextView.getText().toString();

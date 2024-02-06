@@ -31,20 +31,22 @@ public class CommunityPageFragment extends Fragment {
         Bundle args = getArguments();
         if (args != null) {
             String communityID = args.getString("communityID");
+            //retrieve notes of that particular community
+            //retrieve community data
             retrieveCommunityData(communityID);
+
+
+            // Find UI elements
+            TabLayout tabLayout = view.findViewById(R.id.tabLayout);
+            ViewPager viewPager = view.findViewById(R.id.viewPager);
+
+            // Set up ViewPager and attach adapter
+            CommunityPagerAdapter pagerAdapter = new CommunityPagerAdapter(getChildFragmentManager(), communityID);
+            viewPager.setAdapter(pagerAdapter);
+
+            // Link the TabLayout to the ViewPager
+            tabLayout.setupWithViewPager(viewPager);
         }
-
-        // Find UI elements
-        TabLayout tabLayout = view.findViewById(R.id.tabLayout);
-        ViewPager viewPager = view.findViewById(R.id.viewPager);
-
-        // Set up ViewPager and attach adapter
-        CommunityPagerAdapter pagerAdapter = new CommunityPagerAdapter(getChildFragmentManager());
-        viewPager.setAdapter(pagerAdapter);
-
-        // Link the TabLayout to the ViewPager
-        tabLayout.setupWithViewPager(viewPager);
-
         return view;
     }
 
