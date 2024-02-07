@@ -1,0 +1,60 @@
+<androidx.cardview.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    android:elevation="4dp">
+    <!-- item_question.xml -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@color/baby_pink">
+
+        <!-- Add your custom design for each question item here -->
+        <ImageView
+            android:id="@+id/questionImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/question_default" />
+
+        <TextView
+            android:id="@+id/questionTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_toEndOf="@id/questionImage"
+            android:text="Question Title"
+            android:textAllCaps="true"
+
+            android:textColor="@color/black"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/questionDescription"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/questionTitle"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="9dp"
+            android:layout_toEndOf="@id/questionImage"
+            android:text="Question Description"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/tutorNamePost"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/questionDescription"
+            android:layout_marginStart="13dp"
+            android:layout_marginTop="9dp"
+            android:layout_toEndOf="@id/questionImage"
+            android:text="Post By"
+            android:textColor="@color/teal_700"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>
