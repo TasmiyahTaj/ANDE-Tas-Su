@@ -135,7 +135,7 @@ public class ProfileFragment extends Fragment {
                                     String description = document.getString("description");
                                     String communityId = document.getString("communityID");
                                     String questionImage = document.getString("questionImageUrl");
-
+                                    String questionId = document.getId();
 
                                     // Retrieve community title and tutor ID
                                     db.collection("Community")
@@ -155,9 +155,9 @@ public class ProfileFragment extends Fragment {
                                                                     String tutorName = tutorSnapshot.getString("username");
                                                                     // Add the question to the list
                                                                     if(questionImage!=null){
-                                                                        questionList.add(new Question(currentUserId, communityTitle, title, description, tutorName,questionImage));
+                                                                        questionList.add(new Question(questionId ,currentUserId, communityTitle, title, description, tutorName,questionImage));
 
-                                                                    }else{         questionList.add(new Question(currentUserId, communityTitle, title, description, tutorName));}
+                                                                    }else{         questionList.add(new Question(questionId ,currentUserId, communityTitle, title, description, tutorName));}
 
                                                                     Log.e("ProfileFragment", "question by me " + questionList.size() + title + tutorName);
 

@@ -65,12 +65,13 @@ public class QuestionsFragment extends Fragment {
                             String description = document.getString("description");
                             String questionImage = document.getString("questionImageUrl");
                             String userID = document.getString("userID");
+                            String questionId = document.getString("questionId");
 
                             // Check for null values before using them
                             String communityTitle = document.getString("communityTitle");
 
                             // Add the question to the list
-                            fetchUsernameAndAddQuestion(userID, communityTitle, title, description, questionImage);
+                            fetchUsernameAndAddQuestion(questionId,userID, communityTitle, title, description, questionImage);
                         }
                     } else {
                         Log.e("Firestore", "Error getting questions", task.getException());
@@ -78,7 +79,7 @@ public class QuestionsFragment extends Fragment {
                 });
     }
 
-    private void fetchUsernameAndAddQuestion(String userID, String communityTitle, String title, String description, String questionImage) {
+    private void fetchUsernameAndAddQuestion(String questionId,String userID, String communityTitle, String title, String description, String questionImage) {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         // Query users collection to get the username
         db.collection("users")
@@ -92,10 +93,10 @@ public class QuestionsFragment extends Fragment {
                         Question newQuestion;
                         if (questionImage != null && communityTitle != null) {
                             Log.d("not null", title);
-                            newQuestion = new Question(userID, "DefaultCommunityTitle", title, description, username, questionImage);
+                            newQuestion = new Question(questionId,userID, "DefaultCommunityTitle", title, description, username, questionImage);
                         } else {
                             Log.d("it is null", "Some data is missing");
-                            newQuestion = new Question(userID, "DefaultCommunityTitle", title, description, username);
+                            newQuestion = new Question(questionId,userID, "DefaultCommunityTitle", title, description, username);
                         }
 
                         questionList.add(newQuestion);

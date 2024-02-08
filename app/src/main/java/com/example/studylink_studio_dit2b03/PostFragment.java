@@ -420,7 +420,7 @@ public class PostFragment extends Fragment  {
                         if (!queryDocumentSnapshots.isEmpty()) {
                             String communityId = queryDocumentSnapshots.getDocuments().get(0).getId();
 
-                            // Create a Post object with the required data
+                            // Create a Question object with the required data
                             Question question = new Question();
 
                             question.setUserID(userId);
@@ -428,6 +428,7 @@ public class PostFragment extends Fragment  {
                             question.setTitle(givenTitle);
                             question.setDescription(givenDescription);
                             question.setCreatedAt(new Timestamp(new Date()).toDate());
+
                             // Check if an image is selected
                             if (selectedImageUri != null) {
                                 // Upload the image and set the URL in the callback
@@ -438,17 +439,29 @@ public class PostFragment extends Fragment  {
                                                 // Set the download URL in the Question object
                                                 question.setQuestionImageUrl(uri.toString());
 
-                                                // Add the post to the "Post" collection in Firestore
+                                                // Add the question to the "Questions" collection in Firestore
                                                 FirebaseFirestore.getInstance().collection("Questions")
                                                         .add(question)
                                                         .addOnSuccessListener(documentReference -> {
-                                                            // Handle success
-                                                            Log.d("Post", "Post added successfully!");
-                                                            // You can navigate to a success page or perform other actions
+                                                            // Get the ID of the newly added question
+                                                            String questionId = documentReference.getId();
+
+                                                            // Update the question with the question ID
+                                                            documentReference.update("questionId", questionId)
+                                                                    .addOnSuccessListener(aVoid -> {
+                                                                        // Handle success
+                                                                        question.setQuestionId(questionId);
+                                                                        Log.d("Post", "Question added successfully with ID: " + questionId);
+                                                                        // You can navigate to a success page or perform other actions
+                                                                    })
+                                                                    .addOnFailureListener(e -> {
+                                                                        // Handle failure
+                                                                        Log.e("Post", "Error updating question with ID", e);
+                                                                    });
                                                         })
                                                         .addOnFailureListener(e -> {
                                                             // Handle failure
-                                                            Log.e("Post", "Error adding post", e);
+                                                            Log.e("Post", "Error adding question", e);
                                                         });
                                             })
                                             .addOnFailureListener(e -> {
@@ -457,17 +470,29 @@ public class PostFragment extends Fragment  {
                                             });
                                 });
                             } else {
-                                // If no image is selected, directly add the post to Firestore
+                                // If no image is selected, directly add the question to Firestore
                                 FirebaseFirestore.getInstance().collection("Questions")
                                         .add(question)
                                         .addOnSuccessListener(documentReference -> {
-                                            // Handle success
-                                            Log.d("Post", "Post added successfully!");
-                                            // You can navigate to a success page or perform other actions
+                                            // Get the ID of the newly added question
+                                            String questionId = documentReference.getId();
+
+                                            // Update the question with the question ID
+                                            documentReference.update("questionId", questionId)
+                                                    .addOnSuccessListener(aVoid -> {
+                                                        // Handle success
+                                                        question.setQuestionId(questionId);
+                                                        Log.d("Post", "Question added successfully with ID: " + questionId);
+                                                        // You can navigate to a success page or perform other actions
+                                                    })
+                                                    .addOnFailureListener(e -> {
+                                                        // Handle failure
+                                                        Log.e("Post", "Error updating question with ID", e);
+                                                    });
                                         })
                                         .addOnFailureListener(e -> {
                                             // Handle failure
-                                            Log.e("Post", "Error adding post", e);
+                                            Log.e("Post", "Error adding question", e);
                                         });
                             }
                         }
@@ -481,6 +506,7 @@ public class PostFragment extends Fragment  {
             Log.e("Post", "Some fields are empty");
         }
     }
+
 
 
 }

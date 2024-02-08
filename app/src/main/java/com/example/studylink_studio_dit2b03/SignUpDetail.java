@@ -1,5 +1,6 @@
 package com.example.studylink_studio_dit2b03;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ public class SignUpDetail extends AppCompatActivity{
 
     private Spinner institutionSpinner, courseSpinner, educationSpinner, specializedCourseSpinner;
     private EditText workExperienceEditText;
+    private EditText acct, cfm_acct;
     private RadioButton studentRadioButton, teacherRadioButton;
     private LinearLayout studentFieldsLayout, teacherFieldsLayout;
     private String userId, username, email;
@@ -44,6 +46,7 @@ public class SignUpDetail extends AppCompatActivity{
     int roleid;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri profileImageUri;
+    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +55,8 @@ public class SignUpDetail extends AppCompatActivity{
         userId = getIntent().getStringExtra("userId");
         username = getIntent().getStringExtra("username");
         email = getIntent().getStringExtra("email");
-
+        acct=findViewById(R.id.account_number);
+        cfm_acct=findViewById(R.id.confirm_accNo);
         institutionSpinner = findViewById(R.id.institutionSpinner);
         courseSpinner = findViewById(R.id.courseSpinner);
         educationSpinner = findViewById(R.id.educationSpinner);
@@ -222,27 +226,47 @@ public class SignUpDetail extends AppCompatActivity{
     }
 
     private void saveTeacherToDatabase() {
-        // Save user information in the "tutors" table of your database
         String selectedEducation = educationSpinner.getSelectedItem().toString();
         String selectedSpecializedCourse = specializedCourseSpinner.getSelectedItem().toString();
-        int workExperience = Integer.parseInt(workExperienceEditText.getText().toString());
 
-        Tutor tutor = new Tutor(userId, username, selectedEducation, selectedSpecializedCourse, workExperience);
+        // Get the text from EditText fields
+        String accountNoText = acct.getText().toString();
+        String cfmActNoText = cfm_acct.getText().toString();
 
-        FirebaseFirestore.getInstance().collection("Tutor")
-                .document(userId)
-                .set(tutor)
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Toast.makeText(SignUpDetail.this, "Tutor details saved successfully", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(SignUpDetail.this, "Error saving Tutor details", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        // Check if EditText fields are not empty
+        if (!accountNoText.isEmpty() && !cfmActNoText.isEmpty()) {
+            // Parse the strings into integers
+            long accountNo = Long.parseLong(accountNoText);
+            long cfmActNo = Long.parseLong(cfmActNoText);
+
+            if (accountNo == cfmActNo) {
+                // Proceed with saving to the database
+                int workExperience = Integer.parseInt(workExperienceEditText.getText().toString());
+
+                Tutor tutor = new Tutor(userId, username, selectedEducation, selectedSpecializedCourse, workExperience, accountNo);
+
+                FirebaseFirestore.getInstance().collection("Tutor")
+                        .document(userId)
+                        .set(tutor)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(SignUpDetail.this, "Tutor details saved successfully", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(SignUpDetail.this, "Error saving Tutor details", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            } else {
+                Toast.makeText(SignUpDetail.this, "Account Number doesn't match", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            // Handle case where EditText fields are empty
+            Toast.makeText(SignUpDetail.this, "Please enter account numbers", Toast.LENGTH_SHORT).show();
+        }
     }
+
 
     private void populateInstitutionsSpinner() {
         // Dummy data for institutions (replace this with your data)
