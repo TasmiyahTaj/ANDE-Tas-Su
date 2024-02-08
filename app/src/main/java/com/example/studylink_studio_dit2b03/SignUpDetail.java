@@ -1,8 +1,6 @@
 package com.example.studylink_studio_dit2b03;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -31,14 +29,13 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
-import android.Manifest;
+
 public class SignUpDetail extends AppCompatActivity{
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
-
+    private EditText acct, cfm_acct;
     private Spinner institutionSpinner, courseSpinner, educationSpinner, specializedCourseSpinner;
     private EditText workExperienceEditText;
-    private EditText acct, cfm_acct;
     private RadioButton studentRadioButton, teacherRadioButton;
     private LinearLayout studentFieldsLayout, teacherFieldsLayout;
     private String userId, username, email;
@@ -47,30 +44,27 @@ public class SignUpDetail extends AppCompatActivity{
     int roleid;
     private static final int PICK_IMAGE_REQUEST = 1;
     private Uri profileImageUri;
-    private static final int REQUEST_STORAGE_PERMISSION = 100;
-    @SuppressLint("MissingInflatedId")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.signup_detail);
-        if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, REQUEST_STORAGE_PERMISSION);
-        } else{
+
         userId = getIntent().getStringExtra("userId");
         username = getIntent().getStringExtra("username");
         email = getIntent().getStringExtra("email");
-        acct = findViewById(R.id.account_number);
-        cfm_acct = findViewById(R.id.confirm_accNo);
+
         institutionSpinner = findViewById(R.id.institutionSpinner);
         courseSpinner = findViewById(R.id.courseSpinner);
         educationSpinner = findViewById(R.id.educationSpinner);
         specializedCourseSpinner = findViewById(R.id.specializedCourseSpinner);
         workExperienceEditText = findViewById(R.id.workExperienceEditText);
+        acct = findViewById(R.id.account_number);
+        cfm_acct = findViewById(R.id.confirm_accNo);
         studentRadioButton = findViewById(R.id.studentRadioButton);
         teacherRadioButton = findViewById(R.id.teacherRadioButton);
         studentFieldsLayout = findViewById(R.id.studentFieldsLayout);
         teacherFieldsLayout = findViewById(R.id.teacherFieldsLayout);
-        profile = findViewById(R.id.profileImageView);
+        profile=findViewById(R.id.profileImageView);
         // Populate spinners with data from Android Studio (dummy data for demonstration)
         populateInstitutionsSpinner();
         populateCoursesSpinner();
@@ -120,13 +114,13 @@ public class SignUpDetail extends AppCompatActivity{
             public void onCheckedChanged(RadioGroup radioGroup, int checkedId) {
                 if (checkedId == R.id.studentRadioButton) {
                     // User selected role as Student
-                    roleid = 1;
+                    roleid=1;
                     studentFieldsLayout.setVisibility(View.VISIBLE);
                     teacherFieldsLayout.setVisibility(View.GONE);
                     btnNext.setVisibility(View.VISIBLE);
                 } else if (checkedId == R.id.teacherRadioButton) {
                     // User selected role as Teacher
-                    roleid = 2;
+                    roleid=2;
                     studentFieldsLayout.setVisibility(View.GONE);
                     teacherFieldsLayout.setVisibility(View.VISIBLE);
                     btnNext.setVisibility(View.VISIBLE);
@@ -134,7 +128,6 @@ public class SignUpDetail extends AppCompatActivity{
                 }
             }
         });
-    }
     }
 
 
@@ -272,7 +265,6 @@ public class SignUpDetail extends AppCompatActivity{
         }
     }
 
-
     private void populateInstitutionsSpinner() {
         // Dummy data for institutions (replace this with your data)
         List<String> institutions = new ArrayList<>();
@@ -280,6 +272,7 @@ public class SignUpDetail extends AppCompatActivity{
         institutions.add("Nanyang Polytechnic");
         institutions.add("Ngee Ann Polytechnic");
         institutions.add("Republic Polytechnic");
+        institutions.add("Singapore Institute Of Technolgy");
 
         institutions.add("National University Singapore");
         institutions.add("Nanyang Technological University");
