@@ -129,8 +129,6 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
-
-
     private void setCommunityData(Community community, TextView titleTextView, TextView descriptionTextView, TextView memberCountTextView, Button joinButton) {
         // Set data for the card
         String userId = userInstance.getUserid(); // Implement the method to get the current user's ID
@@ -251,6 +249,7 @@ public class HomeFragment extends Fragment {
         String userId = userInstance.getUserid();
         if (userId != null) {
             loadPostsFromJoinedCommunities(userId);
+            requireActivity().runOnUiThread(() -> questionAdapterOther.notifyDataSetChanged());
         } else {
             Log.d("userID is null", "userID is null");
         }
@@ -273,6 +272,7 @@ public class HomeFragment extends Fragment {
                         // Move the following line here, outside the loop
                         // This ensures that post fetching is done after all communities are processed
                         observeCommunityData(joinedCommunities);
+                        requireActivity().runOnUiThread(() -> questionAdapterOther.notifyDataSetChanged());
                     }
                 });
     }
@@ -281,6 +281,7 @@ public class HomeFragment extends Fragment {
         for (String communityId : joinedCommunities) {
             fetchPostsFromCommunity(communityId);
         }
+        requireActivity().runOnUiThread(() -> questionAdapterOther.notifyDataSetChanged());
         sortQuestionsByTimestamp();
     }
 
@@ -314,6 +315,7 @@ public class HomeFragment extends Fragment {
                                 .get()
                                 .addOnCompleteListener(postTask -> {
                                     if (postTask.isSuccessful()) {
+                                        questionList.clear();
                                         for (QueryDocumentSnapshot document : postTask.getResult()) {
                                             String title = document.getString("title");
                                             String description = document.getString("description");
@@ -345,6 +347,7 @@ public class HomeFragment extends Fragment {
                                                             }
 
                                                             questionList.add(newQuestion);
+                                                            questionAdapterOther.notifyDataSetChanged();
                                                         }
                                                     });
                                         }
