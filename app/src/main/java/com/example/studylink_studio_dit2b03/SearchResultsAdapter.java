@@ -1,48 +1,54 @@
 package com.example.studylink_studio_dit2b03;
-
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import java.util.List;
 
-public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.ViewHolder> {
+public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.SearchViewHolder> {
 
-    private List<String> searchResults;
+    private Context context;
+    private List<SearchItem> searchItemList;
 
-    public SearchResultsAdapter(List<String> searchResults) {
-        this.searchResults = searchResults;
+    public SearchResultsAdapter(Context context, List<SearchItem> searchItemList) {
+        this.context = context;
+        this.searchItemList = searchItemList;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search_result, parent, false);
-        return new ViewHolder(view);
+    public SearchViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.search_item_layout, parent, false);
+        return new SearchViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String result = searchResults.get(position);
-        holder.bind(result);
+    public void onBindViewHolder(@NonNull SearchViewHolder holder, int position) {
+        SearchItem item = searchItemList.get(position);
+        holder.bind(item);
     }
 
     @Override
     public int getItemCount() {
-        return searchResults.size();
+        return searchItemList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView textViewResult;
+    public class SearchViewHolder extends RecyclerView.ViewHolder {
+        TextView titleTextView;
+        TextView descriptionTextView;
 
-        public ViewHolder(@NonNull View itemView) {
+        public SearchViewHolder(@NonNull View itemView) {
             super(itemView);
-            textViewResult = itemView.findViewById(R.id.textViewResult);
+            titleTextView = itemView.findViewById(R.id.titleTextView);
+            descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
         }
 
-        public void bind(String result) {
-            textViewResult.setText(result);
+        public void bind(SearchItem item) {
+            titleTextView.setText(item.getTitle());
+            descriptionTextView.setText(item.getDescription());
         }
     }
 }
