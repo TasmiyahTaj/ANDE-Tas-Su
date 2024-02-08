@@ -90,14 +90,14 @@ public class SignUpDetail extends AppCompatActivity{
                     // User selected role as Student
                     saveUserToDatabase();
                     saveStudentToDatabase(selectedInstitution, selectedCourse);
-                    startActivity(new Intent(SignUpDetail.this, MainActivity.class));
+                    startActivity(new Intent(SignUpDetail.this, Login.class));
                     finish();
                 } else if (teacherRadioButton.isChecked()) {
                     // User selected role as Teacher
                     saveUserToDatabase();
 
                     saveTeacherToDatabase();
-                    startActivity(new Intent(SignUpDetail.this, MainActivity.class));
+                    startActivity(new Intent(SignUpDetail.this, Login.class));
                     finish();
 
                 } else {
