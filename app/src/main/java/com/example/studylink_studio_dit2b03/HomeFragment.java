@@ -194,6 +194,14 @@ public class HomeFragment extends Fragment {
                     // Update the member count and add the user to the subcollection
                     transaction.update(communityRef, "memberCount", currentMemberCount + 1);
                     transaction.set(communityRef.collection("members").document(userId), new HashMap<>());
+
+                    // Create a reference to the user's document in the 'users' collection
+                    DocumentReference userRef = db.collection("users").document(userId);
+
+                    // Check if the 'joined_communities' subcollection exists, create if not
+                    if (!userRef.collection("joined_communities").document(community.getCommunityId()).equals(null)) {
+                        transaction.set(userRef.collection("joined_communities").document(community.getCommunityId()), new HashMap<>());
+                    }
                 } else {
                     // Handle the case where the document doesn't exist or "member_count" is missing
                     Log.e("JoinButtonClick", "Document doesn't exist or missing 'member_count' field");
@@ -212,6 +220,7 @@ public class HomeFragment extends Fragment {
             });
         }
     }
+
     private Button getJoinButtonForCommunity(Community community) {
         int communityIndex = trendingCommunities.indexOf(community);
         if (communityIndex != -1 && communityIndex < joinButtons.size()) {
