@@ -4,9 +4,13 @@
     android:background="@color/baby_pink"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <!-- RadioGroup for choosing the role -->
-
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <!-- Student Fields -->
     <ImageView
         android:id="@+id/profileImageView"
@@ -83,7 +87,7 @@
     <LinearLayout
         android:id="@+id/teacherFieldsLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="333dp"
         android:layout_below="@id/roleRadioGroup"
         android:layout_marginTop="16dp"
         android:orientation="vertical"
@@ -93,30 +97,30 @@
         <Spinner
             android:id="@+id/educationSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/white"
-            android:textColorHint="@android:color/black"
-            android:textColor="@android:color/black"
             android:backgroundTint="@android:color/darker_gray"
-            android:hint="Select your Highest Education"
             android:drawableEnd="@drawable/ic_arrow"
-            android:padding="8dp" />
+            android:hint="Select your Highest Education"
+            android:padding="8dp"
+            android:textColor="@android:color/black"
+            android:textColorHint="@android:color/black" />
 
         <!-- Specialized Course Spinner -->
         <Spinner
             android:id="@+id/specializedCourseSpinner"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="50dp"
             android:layout_marginBottom="8dp"
             android:background="@android:color/white"
-            android:textColorHint="@android:color/black"
-            android:textColor="@android:color/black"
             android:backgroundTint="@android:color/darker_gray"
-            android:hint="Select your Specialized Course"
             android:drawableEnd="@drawable/ic_arrow"
+            android:hint="Select your Specialized Course"
+            android:padding="8dp"
+            android:textColor="@android:color/black"
 
-            android:padding="8dp" />
+            android:textColorHint="@android:color/black" />
 
         <!-- Work Experience Years EditText -->
         <EditText
@@ -127,25 +131,42 @@
             android:background="@android:color/white"
             android:hint="Enter your Work Experience (in years)"
             android:inputType="number"
-            android:textColor="@android:color/black"
-            android:padding="8dp" />
+            android:padding="8dp"
+            android:textColor="@android:color/black" />
+
+        <EditText
+            android:id="@+id/account_number"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:ems="10"
+            android:hint="Enter your account number"
+            android:inputType="numberPassword" />
+
+        <EditText
+            android:id="@+id/confirm_accNo"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            android:ems="10"
+            android:hint="Confirm account number"
+            android:inputType="numberPassword" />
 
     </LinearLayout>
 
     <!-- Button to proceed to the next step -->
     <Button
         android:id="@+id/btnNext"
-        android:layout_width="321dp"
-        android:layout_height="82dp"
+        android:layout_width="264dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
 
-        android:layout_marginStart="43dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="107dp"
+        android:layout_marginStart="79dp"
+        android:layout_marginEnd="68dp"
+        android:layout_marginBottom="68dp"
         android:text="Next"
         android:visibility="gone" />
 
-
+    </RelativeLayout>
+    </ScrollView>
 </RelativeLayout>

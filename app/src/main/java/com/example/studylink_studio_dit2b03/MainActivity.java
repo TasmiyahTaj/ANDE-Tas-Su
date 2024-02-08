@@ -1,5 +1,5 @@
 package com.example.studylink_studio_dit2b03;
-
+import com.stripe.android.PaymentConfiguration;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         auth = FirebaseAuth.getInstance(); // Initialize FirebaseAuth
         firebaseUser = auth.getCurrentUser(); // Retrieve the current user
-
+        PaymentConfiguration.init(getApplicationContext(), "pk_test_51OhDNSL9SuBC6TQROKFxV8cjk80pxqaeSFyJ7oxeJh7xC7yTk0q4lQ9gLeStyFlCKu2yQx9J7NqmDU3R8wIpHYxU00nlxMVmTK");
         if (!isUserLoggedIn()) {
             // If not logged in, go to the login page
             Intent intent = new Intent(MainActivity.this, Login.class);
@@ -159,9 +159,10 @@ public class MainActivity extends AppCompatActivity {
                     String qualification = document.getString("qualification");
                     String specialised = document.getString("specialised");
                     int yearsOfExperience = document.getLong("yearsOfExperience").intValue();
+                    long accountNo = document.getLong("account").intValue();
                     Log.d("Main","found cher "+qualification);
                     // Set tutor details in the singleton instance
-                    userInstance.setTutor(new Tutor(userId, userInstance.getUsername(), qualification, specialised, yearsOfExperience));
+                    userInstance.setTutor(new Tutor(userId, userInstance.getUsername(), qualification, specialised, yearsOfExperience,accountNo));
                 } else {
                     // Tutor document does not exist
                 }

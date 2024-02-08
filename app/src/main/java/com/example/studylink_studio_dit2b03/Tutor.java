@@ -3,13 +3,14 @@ package com.example.studylink_studio_dit2b03;
 public class Tutor {
     private String userid,username,qualification,specialised;
     private int yearsOfExperience;
-
-    public Tutor(String userid, String username, String qualification, String specialised, int yearsOfExperience) {
+private long account;
+    public Tutor(String userid, String username, String qualification, String specialised, int yearsOfExperience,long account) {
         this.userid = userid;
         this.username = username;
         this.qualification = qualification;
         this.specialised = specialised;
         this.yearsOfExperience = yearsOfExperience;
+        this.account=account;
     }
 
     public String getUserid() {
@@ -50,5 +51,13 @@ public class Tutor {
 
     public void setYearsOfExperience(int yearsOfExperience) {
         this.yearsOfExperience = yearsOfExperience;
+    }
+
+    public long getAccount() {
+        return account;
+    }
+
+    public void setAccount(int account) {
+        this.account = account;
     }
 }

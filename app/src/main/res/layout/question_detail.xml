@@ -1,0 +1,92 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Question Details -->
+    <TextView
+        android:id="@+id/questionTitleTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Question Title"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:background="@color/baby_pink"
+        android:textColor="@android:color/white"/>
+
+    <ImageView
+        android:id="@+id/questionImageView"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:layout_below="@id/questionTitleTextView"/>
+
+    <TextView
+        android:id="@+id/questionDescriptionTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/questionImageView"
+        android:text="Question Description"
+        android:textSize="16sp"
+        android:padding="16dp"/>
+
+    <TextView
+        android:id="@+id/communityNameTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/questionDescriptionTextView"
+        android:text="Community Name"
+        android:textSize="16sp"
+        android:textColor="@android:color/darker_gray"
+        android:padding="16dp"/>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:layout_below="@id/communityNameTextView"/>
+
+    <!-- Replies Section -->
+    <ScrollView
+        android:id="@+id/repliesScrollView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/divider"
+        android:layout_above="@id/replyEditText">
+
+        <LinearLayout
+            android:id="@+id/repliesLinearLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"/>
+
+    </ScrollView>
+
+    <!-- Reply EditText -->
+
+    <!-- Post Button -->
+
+    <EditText
+        android:id="@+id/replyEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@id/postButton"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="-44dp"
+        android:layout_toLeftOf="@id/postButton"
+        android:hint="Write your reply here..."
+        android:padding="16dp" />
+
+    <Button
+        android:id="@+id/postButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Post"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="16dp"/>
+</RelativeLayout>
