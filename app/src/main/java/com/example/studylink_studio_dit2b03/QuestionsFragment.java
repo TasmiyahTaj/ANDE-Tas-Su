@@ -66,10 +66,8 @@ public class QuestionsFragment extends Fragment {
                             String questionImage = document.getString("questionImageUrl");
                             String userID = document.getString("userID");
                             String questionId = document.getString("questionId");
-
                             // Check for null values before using them
                             String communityTitle = document.getString("communityTitle");
-
                             // Add the question to the list
                             fetchUsernameAndAddQuestion(questionId,userID, communityTitle, title, description, questionImage);
                         }
@@ -91,7 +89,7 @@ public class QuestionsFragment extends Fragment {
 
                         // Add the question to the list
                         Question newQuestion;
-                        if (questionImage != null && communityTitle != null) {
+                        if (questionImage != null) {
                             Log.d("not null", title);
                             newQuestion = new Question(questionId,userID, "DefaultCommunityTitle", title, description, username, questionImage);
                         } else {

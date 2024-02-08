@@ -181,7 +181,8 @@ public class PostFragment extends Fragment  {
                 }
             });
             return view;
-        }else if (userInstance.getRoleid() == 2) {
+        }
+        else if (userInstance.getRoleid() == 2) {
             view = inflater.inflate(R.layout.fragment_tutor_post, container, false);
 
 
@@ -192,6 +193,17 @@ public class PostFragment extends Fragment  {
                     Fragment uploadNoteFragment = new UploadNoteFragment();
                     FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
                     fm.replace(R.id.container, uploadNoteFragment).addToBackStack(null).commit();
+                }
+            });
+
+            // for create questions
+            Button createQuestionButton = view.findViewById(R.id.btnCreateQuestion);
+            createQuestionButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Fragment uploadQuestionFragment = new uploadQuestionFragment();
+                    FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+                    fm.replace(R.id.container, uploadQuestionFragment).addToBackStack(null).commit();
                 }
             });
 
