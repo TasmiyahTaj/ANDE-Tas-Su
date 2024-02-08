@@ -16,7 +16,9 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.textview.MaterialTextView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -34,7 +36,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 public class ProfileFragment extends Fragment {
-
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
     private FirebaseAuth auth;
     private ImageView settingBtn;
     private TextView profile_username, description,years;
@@ -191,7 +194,13 @@ public class ProfileFragment extends Fragment {
                 String specialisation = userInstance.getTutor().getSpecialised();
                 String qualification = userInstance.getTutor().getQualification();
                 int yearsOfExperience = userInstance.getTutor().getYearsOfExperience();
+                viewPager = view.findViewById(R.id.viewPager);
+                tabLayout = view.findViewById(R.id.tabLayout);
+                ProfilePagerAdapter pagerAdapter = new ProfilePagerAdapter(getChildFragmentManager(), userInstance.getUserid());
+                viewPager.setAdapter(pagerAdapter);
 
+                // Link the TabLayout to the ViewPager
+                tabLayout.setupWithViewPager(viewPager);
                 if (profileUrl != null) {
                     Uri imageUri = Uri.parse(profileUrl);
 

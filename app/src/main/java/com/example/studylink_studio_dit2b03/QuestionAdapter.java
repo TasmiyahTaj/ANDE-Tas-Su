@@ -77,6 +77,8 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                 bundle.putString("questionCommunity", question.getCommunityName());
                 bundle.putString("questionId", question.getQuestionId());
                 bundle.putString("questionImageUrl", question.getQuestionImageUrl());
+                bundle.putString("postedBy", question.getUserID());
+
                 QuestionDetailsFragment questionFragment = new QuestionDetailsFragment();
                 questionFragment.setArguments(bundle);
 
