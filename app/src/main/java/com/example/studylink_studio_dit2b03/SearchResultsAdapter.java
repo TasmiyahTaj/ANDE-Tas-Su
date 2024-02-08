@@ -1,9 +1,15 @@
 package com.example.studylink_studio_dit2b03;
+
 import android.content.Context;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+
+
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
@@ -42,8 +48,12 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
         public SearchViewHolder(@NonNull View itemView) {
             super(itemView);
+
             titleTextView = itemView.findViewById(R.id.titleTextView);
             descriptionTextView = itemView.findViewById(R.id.descriptionTextView);
+
+            //textViewResult = itemView.findViewById(R.id.textViewResult);
+
         }
 
         public void bind(SearchItem item) {

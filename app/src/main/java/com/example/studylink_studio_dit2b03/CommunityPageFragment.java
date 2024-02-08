@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -27,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
@@ -37,18 +39,22 @@ public class CommunityPageFragment extends Fragment {
     private Community communityData;
     private String communityID;
     private TextView communityNameTextView, communityDescriptionTextView, communityMemberCountTextView;
-
+    private boolean isUserJoined = false;
+    private String userID;
+    private Button joinButton;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_community_page, container, false);
-
+        joinButton = view.findViewById(R.id.joinButton);
         // Retrieve data from arguments
         Bundle args = getArguments();
+        userInstance = User.getInstance();
+        userID = userInstance.getUserid();
         if (args != null) {
             communityID = args.getString("communityID");
-            // Retrieve notes of that particular community
-            // Retrieve community data
+
             retrieveCommunityData(communityID);
+
 
             // Find UI elements
             TabLayout tabLayout = view.findViewById(R.id.tabLayout);
@@ -85,6 +91,7 @@ public class CommunityPageFragment extends Fragment {
                     communityData = document.toObject(Community.class);
 
                     if (communityData != null) {
+                        checkIfUserJoined(communityData, userID, joinButton);
                         // Now you can use the communityData as needed
                         communityNameTextView = getView().findViewById(R.id.communityTitleTextView);
                         communityDescriptionTextView = getView().findViewById(R.id.communityDescriptionTextView);
@@ -93,9 +100,6 @@ public class CommunityPageFragment extends Fragment {
                         communityDescriptionTextView.setText(communityData.getDescription());
                         communityMemberCountTextView.setText("Member :" + communityData.getMemberCount());
                         String creatorID = communityData.getCreatorId();
-
-                        userInstance = User.getInstance();
-                        String userID = userInstance.getUserid();
 
                         // Check if the userID is the same as the creatorID
                         if (userID != null && userID.equals(creatorID)) {
@@ -119,6 +123,179 @@ public class CommunityPageFragment extends Fragment {
             }
         });
     }
+
+    private void checkIfUserJoined(Community community, String userId, Button joinButton) {
+        FirebaseFirestore.getInstance()
+                .collection("Community")
+                .document(community.getCommunityId())
+                .collection("members")
+                .document(userId)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().exists()) {
+                            // User is already a member, update the button text
+                            isUserJoined = true;
+                            updateJoinedButtonState(joinButton);
+
+                            setJoinedButtonClickListener(community,joinButton);
+                        } else {
+                            // User is not a member, set the join button click listener
+                            Log.d("havent join", "checkIfUserJoined: ");
+                            setJoinButtonClickListener(community, joinButton);
+                        }
+                    } else {
+                        // Handle task failure, if needed
+                        Log.e("TAG", "Error checking membership status", task.getException());
+                    }
+                });
+    }
+
+
+    private void setJoinButtonClickListener(Community community, Button joinButton) {
+        joinButton.setOnClickListener(v -> handleJoinButtonClick(community, joinButton));
+    }
+
+    private void handleJoinButtonClick(Community community, Button joinButton) {
+        if(!isUserJoined){
+            FirebaseFirestore db = FirebaseFirestore.getInstance();
+            // Reference to the community document
+            DocumentReference communityRef = db.collection("Community").document(community.getCommunityId());
+
+            // Add the user to the members subcollection
+            db.runTransaction(transaction -> {
+                // Retrieve the current member count
+                DocumentSnapshot snapshot = transaction.get(communityRef);
+
+                // Check if the document exists and contains the "member_count" field
+                if (snapshot.exists() && snapshot.contains("memberCount")) {
+                    long currentMemberCount = snapshot.getLong("memberCount");
+
+                    // Update the member count and add the user to the subcollection
+                    transaction.update(communityRef, "memberCount", currentMemberCount + 1);
+                    long currentM = currentMemberCount + 1;
+                    communityData.setMemberCount((int) currentM);
+                    transaction.set(communityRef.collection("members").document(userID), new HashMap<>());
+
+                    // Create a reference to the user's document in the 'users' collection
+                    DocumentReference userRef = db.collection("users").document(userID);
+
+                    // Check if the 'joined_communities' subcollection exists, create if not
+                    if (!userRef.collection("joined_communities").document(community.getCommunityId()).equals(null)) {
+                        transaction.set(userRef.collection("joined_communities").document(community.getCommunityId()), new HashMap<>());
+                    }
+                } else {
+                    // Handle the case where the document doesn't exist or "member_count" is missing
+                    Log.e("JoinButtonClick", "Document doesn't exist or missing 'member_count' field");
+                }
+
+                return null;
+            }).addOnSuccessListener(aVoid -> {
+                // Update UI or show a success message if needed
+                Log.d("JoinButtonClick", "User joined community: " + community.getTitle());
+                // After joining, update the button text
+                joinButton.setText("JOINED");
+                isUserJoined = true;
+                communityMemberCountTextView.setText("Member :" + communityData.getMemberCount());
+            }).addOnFailureListener(e -> {
+                // Handle the failure to join (e.g., display an error message)
+                Log.e("JoinButtonClick", "Failed to join community: " + community.getTitle(), e);
+            });
+        }
+        else{
+            showLeaveConfirmationDialog(community, userID);
+        }
+
+
+    }
+
+    private void updateJoinedButtonState(Button joinButton) {
+        joinButton.setText("JOINED");
+    }
+
+    private void setJoinedButtonClickListener(Community community,Button joinButton) {
+        joinButton.setOnClickListener(v -> {
+            // Show a confirmation dialog before leaving the community
+            showLeaveConfirmationDialog(community, userID);
+        });
+    }
+
+    private void showLeaveConfirmationDialog(Community community, String userId) {
+        if(isUserJoined){
+            AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+            builder.setTitle("Leave Community");
+            builder.setMessage("Are you sure you want to leave this community?");
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                // User clicked Yes, perform leave actions
+                leaveCommunity(community, userId);
+            });
+            builder.setNegativeButton("No", (dialog, which) -> {
+                // User clicked No, do nothing or provide feedback
+                dialog.dismiss();
+            });
+            builder.show();
+        }
+        else{
+            handleJoinButtonClick(community, joinButton);
+        }
+
+    }
+
+    private void leaveCommunity(Community community, String userId) {
+        // Remove the user from the "members" subcollection of the community
+        FirebaseFirestore.getInstance()
+                .collection("Community")
+                .document(community.getCommunityId())
+                .collection("members")
+                .document(userId)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    decrementMemberCount(community);
+                    // User successfully removed from the community
+                    showToast("You have left the community");
+                    // Perform additional actions if needed
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure to remove user from the community
+                    showToast("Failed to leave the community. Please try again.");
+                });
+
+        // Remove the community from the "joined_communities" subcollection of the user
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .collection("joined_communities")
+                .document(community.getCommunityId())
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    joinButton.setText("JOIN");
+                    isUserJoined = false;
+
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure to remove community from the user's joined communities
+                });
+    }
+
+    private void decrementMemberCount(Community community) {
+        // Update the memberCount in the community document by decrementing it by 1
+        FirebaseFirestore.getInstance()
+                .collection("Community")
+                .document(community.getCommunityId())
+                .update("memberCount", FieldValue.increment(-1))
+                .addOnSuccessListener(aVoid -> {
+                    communityData.setMemberCount(communityData.getMemberCount()-1);
+                    communityMemberCountTextView.setText("Member :" + communityData.getMemberCount());
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure to decrement memberCount
+                });
+    }
+
+    private void showToast(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show();
+    }
+
 
     private void showPopupMenu(View view) {
         PopupMenu popupMenu = new PopupMenu(requireContext(), view);
@@ -321,8 +498,6 @@ public class CommunityPageFragment extends Fragment {
                 });
     }
 
-
-
     private void deleteNotes(String communityID) {
         Log.d("inside", "delete N ");
         FirebaseFirestore.getInstance()
@@ -388,8 +563,6 @@ public class CommunityPageFragment extends Fragment {
         fm.replace(R.id.container, homeFragment).addToBackStack(null).commit();
 
     }
-
-
 
 
 }
