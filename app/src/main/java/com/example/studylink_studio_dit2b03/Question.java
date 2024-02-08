@@ -52,6 +52,14 @@ public class Question {
         this.questionId = questionId;
     }
 
+    public Question(String userID,  String title, String description) {
+        this.userID = userID;
+        this.title = title;
+        this.description = description;
+    }
+
+
+
     public String getUserID() {
         return userID;
     }

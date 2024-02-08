@@ -19,11 +19,16 @@ public class CommunityPagerAdapter extends FragmentPagerAdapter {
         // Return the corresponding fragment for each tab
         switch (position) {
             case 0:
-                return new QuestionsFragment();
+                QuestionsFragment questionsFragment = new QuestionsFragment();
+                Bundle args = new Bundle();
+                args.putString("communityID", communityID);
+                questionsFragment.setArguments(args);
+                return questionsFragment;
+
             case 1:
                 // Pass the communityID to NotesFragment
                 NotesFragment notesFragment = new NotesFragment();
-                Bundle args = new Bundle();
+                args = new Bundle();
                 args.putString("communityID", communityID);
                 notesFragment.setArguments(args);
                 return notesFragment;
