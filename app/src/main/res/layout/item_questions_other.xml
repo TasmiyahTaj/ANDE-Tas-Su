@@ -40,6 +40,7 @@
             android:layout_marginTop="9dp"
             android:layout_toEndOf="@id/questionImage"
             android:text="Question Description"
+            android:maxLines="2"
             android:textColor="@color/black"
             android:textSize="14sp" />
 

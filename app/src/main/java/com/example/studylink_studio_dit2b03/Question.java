@@ -44,6 +44,28 @@ public class Question {
         this.questionId = questionId;
     }
 
+
+    public Question(String questionId, String userID, String communityName, String title, String description, String tutorName, String questionImage, Date createdAt) {
+        this.userID = userID;
+        this.communityName = communityName;
+        this.title = title;
+        this.description = description;
+        this.tutorName = tutorName;
+        this.questionImageUrl = questionImage;
+        this.questionId = questionId;
+        this.createdAt = createdAt;
+    }
+
+    public Question(String questionId, String userID, String communityName, String title, String description, String tutorName, Date createdAt) {
+        this.userID = userID;
+        this.communityName = communityName;
+        this.title = title;
+        this.description = description;
+        this.tutorName = tutorName;
+        this.questionId = questionId;
+        this.createdAt = createdAt;
+    }
+
     public Question(String questionId, String userID, String communityName, String title, String description, String tutorName, String questionImage) {
         this.userID = userID;
         this.communityName = communityName;
@@ -62,15 +84,15 @@ public class Question {
         this.tutorName = tutorName;
         this.createdAt= createdAt;
     }
-    public Question(String userID, String communityName, String title, String description, String tutorName, String questionImage, Date createdAt) {
-        this.userID = userID;
-        this.communityName = communityName;
-        this.title = title;
-        this.description = description;
-        this.tutorName = tutorName;
-        this.questionImageUrl = questionImage;
-        this.createdAt = createdAt;
-    }
+//    public Question(String userID, String communityName, String title, String description, String tutorName, String questionImage, Date createdAt) {
+//        this.userID = userID;
+//        this.communityName = communityName;
+//        this.title = title;
+//        this.description = description;
+//        this.tutorName = tutorName;
+//        this.questionImageUrl = questionImage;
+//        this.createdAt = createdAt;
+//    }
 
     public Question(String userID,  String title, String description) {
         this.userID = userID;

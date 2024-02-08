@@ -326,6 +326,7 @@ public class HomeFragment extends Fragment {
                                     if (postTask.isSuccessful()) {
                                         questionList.clear();
                                         for (QueryDocumentSnapshot document : postTask.getResult()) {
+                                            String questionID = document.getString("questionId");
                                             String title = document.getString("title");
                                             String description = document.getString("description");
                                             String questionImage = document.getString("questionImageUrl");
@@ -349,10 +350,11 @@ public class HomeFragment extends Fragment {
                                                             Question newQuestion;
                                                             if (questionImage != null ) {
                                                                 Log.d("not null", title);
-                                                                newQuestion = new Question(userID, communityName, title, description, username, questionImage,createdAt);
+
+                                                                newQuestion = new Question(questionID,userID, communityName, title, description, username, questionImage,createdAt);
                                                             } else {
                                                                 Log.d("it is null", "Some data is missing");
-                                                                newQuestion = new Question(userID, communityName, title, description, username, createdAt);
+                                                                newQuestion = new Question(questionID,userID, communityName, title, description, username, createdAt);
                                                             }
 
                                                             questionList.add(newQuestion);
