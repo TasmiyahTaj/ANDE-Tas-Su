@@ -27,7 +27,7 @@ public class SearchFragment extends Fragment {
 
         // Initialize UI components
         searchView = view.findViewById(R.id.searchView);
-        searchResultsRecyclerView = view.findViewById(R.id.searchResultsRecyclerView);
+        //searchResultsRecyclerView = view.findViewById(R.id.searchResultsRecyclerView);
 
         // Configure the RecyclerView
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());

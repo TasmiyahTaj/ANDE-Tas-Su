@@ -22,17 +22,18 @@ public class ProfilePagerAdapter extends FragmentPagerAdapter {
             case 0:
                 // Pass the tutorId to the CommunityFragment
                 CommunityFragment communityFragment = new CommunityFragment();
-          Bundle args = new Bundle();
+                Bundle args = new Bundle();
                 args.putString("tutorId", tutorId);
                 communityFragment.setArguments(args);
                 return communityFragment;
             case 1:
-                // Pass the tutorId to the NotesFragment
-                NotesForProfileFragment notesFragment = new NotesForProfileFragment();
-                args = new Bundle();
-                args.putString("tutorId", tutorId);
-                notesFragment.setArguments(args);
-                return notesFragment;
+            // Pass the communityID to NotesFragment
+            NotesFragmentpfp notesFragment = new NotesFragmentpfp();
+            args = new Bundle();
+            args.putString("tutorId", tutorId);
+            notesFragment.setArguments(args);
+            return notesFragment;
+
             default:
                 return null;
         }
