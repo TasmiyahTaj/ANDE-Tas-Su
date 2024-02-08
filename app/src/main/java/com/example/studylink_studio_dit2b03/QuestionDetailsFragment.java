@@ -37,6 +37,8 @@ public class QuestionDetailsFragment extends Fragment {
     private Button postButton;
     private LinearLayout repliesLinearLayout;
     private FirebaseFirestore db;
+
+    private ImageView questionImageView;
     User userInstance = User.getInstance();
     @Nullable
     @Override
@@ -53,19 +55,37 @@ public class QuestionDetailsFragment extends Fragment {
         replyEditText = view.findViewById(R.id.replyEditText);
         postButton = view.findViewById(R.id.postButton);
         repliesLinearLayout = view.findViewById(R.id.repliesLinearLayout);
+        questionImageView = view.findViewById(R.id.questionImageView);
 
         // Retrieve question details from arguments
         Bundle args = getArguments();
         if (args != null) {
             String questionTitle = args.getString("questionTitle");
             String questionDescription = args.getString("questionDescription");
-            String communityName = args.getString("communityName");
+            String communityName = args.getString("questionCommunity");
+
+            String questionImageUrl = args.getString("questionImageUrl");
+
             questionId=args.getString("questionId");
-            // Set question details to the views
+
             questionTitleTextView.setText(questionTitle);
             questionDescriptionTextView.setText(questionDescription);
-            communityNameTextView.setText(communityName);
-            fetchReplies();
+            communityNameTextView.setText("By:" + communityName);
+            if (questionImageUrl != null && !questionImageUrl.isEmpty()) {
+                // If the question image URL is available, load and display it
+                questionImageView.setVisibility(View.VISIBLE);
+                Picasso.get().load(questionImageUrl).into(questionImageView);
+            } else {
+                // If there's no question image URL, hide the ImageView
+                questionImageView.setVisibility(View.GONE);
+            }
+            if (questionId != null) {
+                fetchReplies(); // Only call fetchReplies if questionId is not null
+            } else {
+                // Handle the case where questionId is null
+                Toast.makeText(getActivity(), "Unable to fetch replies.", Toast.LENGTH_SHORT).show();
+            }
+
         }
 
         // Set click listener for the post button

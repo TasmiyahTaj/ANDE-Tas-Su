@@ -73,8 +73,10 @@ public class QuestionAdapter extends RecyclerView.Adapter<QuestionAdapter.Questi
                 // Add any data you want to pass to the fragment
                 bundle.putString("questionTitle", question.getTitle());
                 bundle.putString("questionDescription", question.getDescription());
+                bundle.putString("questionDescription", question.getDescription());
                 bundle.putString("questionCommunity", question.getCommunityName());
                 bundle.putString("questionId", question.getQuestionId());
+                bundle.putString("questionImageUrl", question.getQuestionImageUrl());
                 QuestionDetailsFragment questionFragment = new QuestionDetailsFragment();
                 questionFragment.setArguments(bundle);
 

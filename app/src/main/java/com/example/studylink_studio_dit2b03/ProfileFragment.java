@@ -121,7 +121,7 @@ public class ProfileFragment extends Fragment {
 // Query questions collection
                 db.collection("Questions")
                         .whereEqualTo("userID", currentUserId)
-//                        .orderBy("createdAt", Query.Direction.DESCENDING)
+                        .orderBy("createdAt", Query.Direction.DESCENDING)
                         .get()
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()) {
@@ -170,7 +170,8 @@ public class ProfileFragment extends Fragment {
 
                                 }
                             } else {
-                                Log.e("Firestore", "Error getting questions", task.getException());
+                                Log.e("Firestore from profile", "Error getting questions: " + task.getException().getLocalizedMessage());
+
                             }
                         });
 
