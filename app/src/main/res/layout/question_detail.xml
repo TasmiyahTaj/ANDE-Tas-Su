@@ -3,16 +3,53 @@
     android:layout_height="match_parent">
 
     <!-- Question Details -->
-    <TextView
-        android:id="@+id/questionTitleTextView"
+    <RelativeLayout
+        android:id="@+id/questionDetailsLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Question Title"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:padding="16dp"
-        android:background="@color/baby_pink"
-        android:textColor="@android:color/white"/>
+        android:background="@color/baby_pink">
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/questionTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Question Title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:padding="16dp"
+            android:textColor="@android:color/white"/>
+
+        <!-- Edit and Delete Icons (Visible for current user's questions) -->
+        <ImageView
+            android:id="@+id/editIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/edit_icon"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"/>
+
+        <ImageView
+            android:id="@+id/deleteIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/delete_icon"
+            android:layout_toLeftOf="@id/editIcon"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"/>
+
+        <!-- Save Icon (Visible for questions not belonging to the current user) -->
+        <ImageView
+            android:id="@+id/saveIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/save_icon"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="16dp"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
 
     <ImageView
         android:id="@+id/questionImageView"
@@ -20,7 +57,7 @@
         android:layout_height="200dp"
         android:scaleType="centerCrop"
         android:visibility="gone"
-        android:layout_below="@id/questionTitleTextView"/>
+        android:layout_below="@id/questionDetailsLayout"/>
 
     <TextView
         android:id="@+id/questionDescriptionTextView"

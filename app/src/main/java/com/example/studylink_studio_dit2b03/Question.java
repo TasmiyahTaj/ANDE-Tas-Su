@@ -1,5 +1,7 @@
 package com.example.studylink_studio_dit2b03;
 
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+
 import java.util.Date;
 
 public class Question {
@@ -148,5 +150,22 @@ public class Question {
 
     public void setQuestionId(String questionId) {
         this.questionId = questionId;
+    }
+    public class QuestionWithDate {
+        private QueryDocumentSnapshot document;
+        private Date createdAt;
+
+        public QuestionWithDate(QueryDocumentSnapshot document, Date createdAt) {
+            this.document = document;
+            this.createdAt = createdAt;
+        }
+
+        public QueryDocumentSnapshot getDocument() {
+            return document;
+        }
+
+        public Date getCreatedAt() {
+            return createdAt;
+        }
     }
 }
