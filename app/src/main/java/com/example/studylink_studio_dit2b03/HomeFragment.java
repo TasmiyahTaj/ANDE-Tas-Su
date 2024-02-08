@@ -7,14 +7,15 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import android.util.Log;
-
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.Timestamp;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,8 +23,12 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Date;
+
 
 public class HomeFragment extends Fragment {
 
@@ -32,18 +37,25 @@ public class HomeFragment extends Fragment {
     private List<TextView> trendingCommunityDescriptions;
     private List<TextView> memberCounts;
     private List<Button> joinButtons;
-
     private List<Community> trendingCommunities;
+    private User userInstance;
+    private List<Question> questionList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private QuestionAdapterOther questionAdapterOther;
 
     public HomeFragment() {
         // Required empty public constructor
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        userInstance = User.getInstance();
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
-
-        // Initialize lists for CardViews and related views
         cardViews = new ArrayList<>();
         trendingCommunityTitles = new ArrayList<>();
         trendingCommunityDescriptions = new ArrayList<>();
@@ -83,9 +95,14 @@ public class HomeFragment extends Fragment {
         cardViews.get(1).setOnClickListener(v -> handleCardClick(trendingCommunities.get(1)));
         cardViews.get(2).setOnClickListener(v -> handleCardClick(trendingCommunities.get(2)));
 
+        recyclerView = view.findViewById(R.id.questionRecyclerViewinHome);
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        questionAdapterOther = new QuestionAdapterOther(questionList);
+        recyclerView.setAdapter(questionAdapterOther);
+
         return view;
     }
-    User userInstance = User.getInstance();
+
     private void loadTrendingCommunities() {
         // Fetch top 3 communities based on member count
         FirebaseFirestore.getInstance().collection("Community")
@@ -112,6 +129,7 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
+
 
     private void setCommunityData(Community community, TextView titleTextView, TextView descriptionTextView, TextView memberCountTextView, Button joinButton) {
         // Set data for the card
@@ -157,9 +175,6 @@ public class HomeFragment extends Fragment {
                     }
                 });
     }
-
-
-
     private void handleJoinButtonClick(Community community, Button joinButton) {
         // Add logic to save user ID in the community's members subcollection
         String userId = userInstance.getUserid(); // Implement the method to get the current user's ID
@@ -199,7 +214,6 @@ public class HomeFragment extends Fragment {
             });
         }
     }
-
     private Button getJoinButtonForCommunity(Community community) {
         int communityIndex = trendingCommunities.indexOf(community);
         if (communityIndex != -1 && communityIndex < joinButtons.size()) {
@@ -207,7 +221,6 @@ public class HomeFragment extends Fragment {
         }
         return null;
     }
-
     private String truncateText(String text, int maxLength) {
         if (text.length() > maxLength) {
             // Truncate the text and append an ellipsis (...) at the end
@@ -216,7 +229,6 @@ public class HomeFragment extends Fragment {
             return text;
         }
     }
-
     private void handleCardClick(Community community) {
         Log.d("CardClick", "Clicked on community: " + community.getTitle());
 
@@ -231,4 +243,122 @@ public class HomeFragment extends Fragment {
         FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
         fm.replace(R.id.container, communityFragment).addToBackStack(null).commit();
     }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // Check if userID is available before loading posts
+        String userId = userInstance.getUserid();
+        if (userId != null) {
+            loadPostsFromJoinedCommunities(userId);
+        } else {
+            Log.d("userID is null", "userID is null");
+        }
+    }
+
+    private void loadPostsFromJoinedCommunities(String userId) {
+        Log.d("user ID ", userId);
+        FirebaseFirestore.getInstance().collection("users")
+                .document(userId)
+                .collection("joined_communities")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        List<String> joinedCommunities = new ArrayList<>();
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String communityId = document.getId();
+                            Log.d("joined community", communityId);
+                            joinedCommunities.add(communityId);
+                        }
+                        // Move the following line here, outside the loop
+                        // This ensures that post fetching is done after all communities are processed
+                        observeCommunityData(joinedCommunities);
+                    }
+                });
+    }
+
+    private void observeCommunityData(List<String> joinedCommunities) {
+        for (String communityId : joinedCommunities) {
+            fetchPostsFromCommunity(communityId);
+        }
+        sortQuestionsByTimestamp();
+    }
+
+    private void sortQuestionsByTimestamp() {
+        Collections.sort(questionList, new Comparator<Question>() {
+            @Override
+            public int compare(Question q1, Question q2) {
+                // Assuming createdAt is of type Date
+                return q1.getCreatedAt().compareTo(q2.getCreatedAt());
+            }
+        });
+
+        // Now you can use the sorted questionList as needed
+        // For example, update your UI or perform any other operations
+    }
+
+    private void fetchPostsFromCommunity(String communityId) {
+        // Fetch community name from the "Community" collection
+        FirebaseFirestore.getInstance().collection("Community")
+                .document(communityId)
+                .get()
+                .addOnCompleteListener(communityTask -> {
+                    if (communityTask.isSuccessful()) {
+                        String communityName = communityTask.getResult().getString("title");
+
+                        // Now you have the community name, you can use it as needed
+
+                        // Fetch posts from the "Questions" collection
+                        FirebaseFirestore.getInstance().collection("Questions")
+                                .whereEqualTo("communityID", communityId)
+                                .get()
+                                .addOnCompleteListener(postTask -> {
+                                    if (postTask.isSuccessful()) {
+                                        for (QueryDocumentSnapshot document : postTask.getResult()) {
+                                            String title = document.getString("title");
+                                            String description = document.getString("description");
+                                            String questionImage = document.getString("questionImageUrl");
+                                            String userID = document.getString("userID");
+                                            Timestamp timestamp = document.getTimestamp("createdAt");
+                                            // Convert the timestamp to a Date object
+                                            Date createdAt = timestamp != null ? timestamp.toDate() : null;
+
+                                            // Fetch username from "users" collection based on userID
+                                            FirebaseFirestore.getInstance().collection("users")
+                                                    .document(userID)
+                                                    .get()
+                                                    .addOnCompleteListener(userTask -> {
+                                                        if (userTask.isSuccessful()) {
+                                                            String username = userTask.getResult().getString("username");
+
+                                                            // Now you have the username, you can use it as needed
+                                                            Log.d("Username", username);
+                                                            Log.d("question title", title);
+
+                                                            Question newQuestion;
+                                                            if (questionImage != null ) {
+                                                                Log.d("not null", title);
+                                                                newQuestion = new Question(userID, communityName, title, description, username, questionImage,createdAt);
+                                                            } else {
+                                                                Log.d("it is null", "Some data is missing");
+                                                                newQuestion = new Question(userID, communityName, title, description, username, createdAt);
+                                                            }
+
+                                                            questionList.add(newQuestion);
+                                                        }
+                                                    });
+                                        }
+                                    }
+                                });
+                    }
+                });
+    }
+
+
+    @Override
+    public void onDestroyView() {
+        // Clean up resources related to the view
+        super.onDestroyView();
+    }
 }
+

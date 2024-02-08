@@ -4,8 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
-
-
     <TextView
         android:id = "@+id/homepageTrending"
         android:layout_width="wrap_content"
@@ -29,7 +27,7 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <!-- Trending Community 1 Card -->
+            <!--TrendingCommunity1Card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView1"
                 android:layout_width="200dp"
@@ -46,7 +44,7 @@
                         android:id="@+id/trendingCommunityTitle1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Trending Community 1"
+                        android:text="TrendingCommunity1"
                         android:textSize="18sp"
                         android:textStyle="bold"/>
 
@@ -76,7 +74,7 @@
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Trending Community 2 Card -->
+            <!--TrendingCommunity2Card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView2"
                 android:layout_width="200dp"
@@ -93,7 +91,7 @@
                         android:id="@+id/trendingCommunityTitle2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Trending Community 2"
+                        android:text="TrendingCommunity2"
                         android:textSize="18sp"
                         android:textStyle="bold"/>
 
@@ -123,7 +121,7 @@
                 </RelativeLayout>
             </androidx.cardview.widget.CardView>
 
-            <!-- Trending Community 3 Card -->
+            <!--TrendingCommunity3Card-->
             <androidx.cardview.widget.CardView
                 android:id="@+id/cardView3"
                 android:layout_width="200dp"
@@ -139,7 +137,7 @@
                         android:id="@+id/trendingCommunityTitle3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Trending Community 3"
+                        android:text="TrendingCommunity3"
                         android:textSize="18sp"
                         android:textStyle="bold"/>
 
@@ -171,5 +169,13 @@
 
         </LinearLayout>
     </HorizontalScrollView>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/questionRecyclerViewinHome"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/horizontalScrollView"
+        android:layout_marginTop="8dp"/>
 
 </RelativeLayout>

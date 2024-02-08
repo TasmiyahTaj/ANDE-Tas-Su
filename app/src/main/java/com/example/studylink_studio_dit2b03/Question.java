@@ -10,9 +10,8 @@ public class Question {
     private String questionImageUrl;
     private String tutorName;
     private String communityName;
-
     private int replyCount;
-private Date createdAt;
+    private Date createdAt;
     public Question(String userID, String communityID, String title, String description) {
         this.userID = userID;
         this.communityID = communityID;
@@ -45,6 +44,24 @@ private Date createdAt;
         this.description = description;
         this.tutorName = tutorName;
         this.questionImageUrl = questionImage;
+    }
+
+    public Question(String userID, String communityName, String title, String description, String tutorName, Date createdAt) {
+        this.userID = userID;
+        this.communityName = communityName;
+        this.title = title;
+        this.description = description;
+        this.tutorName = tutorName;
+        this.createdAt= createdAt;
+    }
+    public Question(String userID, String communityName, String title, String description, String tutorName, String questionImage, Date createdAt) {
+        this.userID = userID;
+        this.communityName = communityName;
+        this.title = title;
+        this.description = description;
+        this.tutorName = tutorName;
+        this.questionImageUrl = questionImage;
+        this.createdAt = createdAt;
     }
 
     public Question(String userID,  String title, String description) {
