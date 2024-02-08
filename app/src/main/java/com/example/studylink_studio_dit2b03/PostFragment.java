@@ -34,6 +34,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.storage.FirebaseStorage;
@@ -46,6 +48,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -146,7 +149,6 @@ public class PostFragment extends Fragment  {
             });
              attachedImage = view.findViewById(R.id.attachedImage);
              buttonRemoveImage = view.findViewById(R.id.buttonRemoveImage);
-// Set visibility to visible and load the attached image using Glide
             attachedImage.setVisibility(View.VISIBLE);
              Button attachImageButton=view.findViewById(R.id.buttonAttachImage);
 
@@ -247,7 +249,7 @@ public class PostFragment extends Fragment  {
                                                         .document(userInstance.getUserid())
                                                         .set(new HashMap<>())
                                                         .addOnSuccessListener(aVoid1 -> {
-                                                            // Navigate to community details after successfully creating the community and 'members' subcollection
+                                                            updateOrAddJoinedCommunities(communityId);
                                                             navigateToCommunityDetails(community);
                                                         })
                                                         .addOnFailureListener(e -> {
@@ -277,6 +279,41 @@ public class PostFragment extends Fragment  {
             // Return an empty view if the user is not logged in
             return new View(requireContext());
         }
+    }
+
+    private void updateOrAddJoinedCommunities(String communityId) {
+        // Get the reference to 'joined_communities' subcollection for the user
+        CollectionReference joinedCommunitiesRef = FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userInstance.getUserid())
+                .collection("joined_communities");
+
+        // Check if the 'joined_communities' subcollection exists
+        joinedCommunitiesRef
+                .limit(1)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        if (task.getResult().isEmpty()) {
+                            // 'joined_communities' subcollection does not exist, create it
+                            joinedCommunitiesRef
+                                    .add(new HashMap<>())
+                                    .addOnFailureListener(e -> {
+                                        // Handle failure to add 'joined_communities' subcollection
+                                    });
+                        } else {
+                            // 'joined_communities' subcollection already exists, add the community ID as a document
+                            joinedCommunitiesRef
+                                    .document(communityId)
+                                    .set(new HashMap<>())
+                                    .addOnFailureListener(e -> {
+                                        // Handle failure to add the document to 'joined_communities' subcollection
+                                    });
+                        }
+                    } else {
+                        // Handle failure to check for the existence of 'joined_communities' subcollection
+                    }
+                });
     }
 
     private void navigateToCommunityDetails(Community community){

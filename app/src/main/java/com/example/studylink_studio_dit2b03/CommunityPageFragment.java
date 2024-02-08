@@ -131,8 +131,7 @@ public class CommunityPageFragment extends Fragment {
                     showEditDialog();
                     return true;
                 case R.id.menu_delete:
-                    // Handle the delete option
-                    // Implement the delete functionality
+                    showDeleteConfirmationDialog();
                     return true;
                 default:
                     return false;
@@ -214,6 +213,180 @@ public class CommunityPageFragment extends Fragment {
                         Toast.makeText(requireContext(), "Failed to update community", Toast.LENGTH_SHORT).show();
                     });
         }
+    }
+
+    private void showDeleteConfirmationDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Delete Community");
+        builder.setMessage("Are you sure you want to delete this community?");
+
+        // Set up buttons for the dialog
+        builder.setPositiveButton("Yes", (dialog, which) -> {
+            deleteCommunityAndMembers(communityID);
+            // User clicked Yes, proceed with the deletion
+            Log.d("click", "yes");
+        });
+
+        builder.setNegativeButton("No", (dialog, which) -> {
+            Log.d("click", "no");
+        });
+
+        // Show the dialog
+        builder.show();
+    }
+
+    private void deleteCommunityAndMembers(String communityID) {
+        // Step 1: Retrieve the list of user IDs from the 'members' subcollection
+        FirebaseFirestore.getInstance()
+                .collection("Community")
+                .document(communityID)
+                .collection("members")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String userId = document.getId();
+
+                            // Step 2: Delete the user from the 'joined_communities' subcollection
+                            deleteCommunityFromUser(userId, communityID);
+                        }
+
+                        // Step 3: Delete the community, questions, and notes
+                        deleteCommunity(communityID);
+                    } else {
+                        Log.e("DeleteQuestions", "deleteCommunityAndMembers");
+                    }
+                });
+    }
+
+    private void deleteCommunityFromUser(String userId, String communityID) {
+        FirebaseFirestore.getInstance()
+                .collection("users")
+                .document(userId)
+                .collection("joined_communities")
+                .document(communityID)
+                .delete()
+                .addOnFailureListener(e -> {
+                    // Handle failure to delete 'joined_communities' document
+                });
+    }
+
+    private void deleteCommunity(String communityID) {
+        Log.d("delete community start", "after deleting all members related to community");
+        // Step 1: Delete questions related to the community
+        deleteQuestions(communityID);
+    }
+
+    private void deleteQuestions(String communityID) {
+        Log.d("inside", "delete Q ");
+        FirebaseFirestore.getInstance()
+                .collection("Questions")
+                .whereEqualTo("communityID", communityID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Delete each document in the 'Questions' collection with the specified communityID
+                        for (DocumentSnapshot document : task.getResult()) {
+                            String questionId = document.getId();
+
+                            // Delete the 'Replies' subcollection for each question
+                            deleteSubcollection("Questions", questionId, "Replies");
+
+                            // Delete the question document itself
+                            document.getReference().delete();
+                        }
+
+                        // Continue with the next step in the deletion process
+                        deleteNotes(communityID);
+                    } else {
+                        // Handle failure to retrieve and delete questions
+                    }
+                });
+    }
+    private void deleteSubcollection(String collectionPath, String documentId, String subcollectionPath) {
+        FirebaseFirestore.getInstance()
+                .collection(collectionPath)
+                .document(documentId)
+                .collection(subcollectionPath)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Delete each document in the subcollection
+                        for (DocumentSnapshot document : task.getResult()) {
+                            document.getReference().delete();
+                        }
+                    } else {
+                        // Handle failure to retrieve and delete subcollection documents
+                    }
+                });
+    }
+
+
+
+    private void deleteNotes(String communityID) {
+        Log.d("inside", "delete N ");
+        FirebaseFirestore.getInstance()
+                .collection("Note")
+                .whereEqualTo("communityId", communityID)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        Log.d("delete note", "success");
+                        // Delete each document in the 'Notes' collection with the specified communityID
+                        for (DocumentSnapshot document : task.getResult()) {
+                            document.getReference().delete();
+                        }
+
+                        // Continue with the next step in the deletion process
+                        deleteMembers(communityID);
+                    } else {
+                        Log.d("delete note", "no");
+                    }
+                });
+    }
+
+    private void deleteMembers(String communityID) {
+        FirebaseFirestore.getInstance()
+                .collection("Community")
+                .document(communityID)
+                .collection("members")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Delete each document in the 'members' subcollection
+                        for (DocumentSnapshot document : task.getResult()) {
+                            document.getReference().delete();
+                        }
+
+                        // Now delete the community document
+                        deleteCommunityDocument(communityID);
+                    } else {
+                        // Handle failure to retrieve 'members' subcollection
+                    }
+                });
+    }
+
+    private void deleteCommunityDocument(String communityID) {
+        FirebaseFirestore.getInstance()
+                .collection("Community")
+                .document(communityID)
+                .delete()
+                .addOnSuccessListener(aVoid -> {
+                    navigateToHomepage();
+                })
+                .addOnFailureListener(e -> {
+                    // Handle failure to delete the community
+                });
+    }
+
+    private void navigateToHomepage() {
+        Fragment homeFragment = new HomeFragment();
+
+
+        // Replace the current fragment with the destination fragment
+        FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+        fm.replace(R.id.container, homeFragment).addToBackStack(null).commit();
+
     }
 
 
