@@ -18,6 +18,19 @@
         android:layout_marginTop="16dp"
         android:layout_marginStart="16dp"/>
 
+    <ImageView
+        android:id="@+id/menuIcon"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_alignTop="@id/communityTitleTextView"
+        android:layout_alignParentEnd="true"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="Menu Icon"
+        android:visibility="invisible"
+        android:src="@drawable/dots" />
+
     <TextView
         android:id="@+id/communityDescriptionTextView"
         android:layout_width="wrap_content"
@@ -38,12 +51,24 @@
         android:layout_marginStart="16dp"
         android:text="Members:0"/>
 
+    <Button
+        android:id="@+id/joinButton"
+        android:layout_below="@id/memberCountTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Join"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:backgroundTint="#F4C2C2"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp" />
+
 
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/memberCountTextView"
+        android:layout_below="@+id/joinButton"
         android:layout_marginTop="16dp"
         app:tabGravity="fill"
         app:tabMode="fixed">

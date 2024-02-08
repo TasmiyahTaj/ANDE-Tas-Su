@@ -1,14 +1,22 @@
 package com.example.studylink_studio_dit2b03;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import androidx.fragment.app.Fragment;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.viewpager.widget.ViewPager;
 import com.google.android.material.tabs.TabItem;
 import com.google.android.material.tabs.TabLayout;
@@ -21,7 +29,14 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class CommunityPageFragment extends Fragment {
+    private User userInstance;
+    private Community communityData;
+    private String communityID;
+    private TextView communityNameTextView, communityDescriptionTextView, communityMemberCountTextView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -30,11 +45,10 @@ public class CommunityPageFragment extends Fragment {
         // Retrieve data from arguments
         Bundle args = getArguments();
         if (args != null) {
-            String communityID = args.getString("communityID");
-            //retrieve notes of that particular community
-            //retrieve community data
+            communityID = args.getString("communityID");
+            // Retrieve notes of that particular community
+            // Retrieve community data
             retrieveCommunityData(communityID);
-
 
             // Find UI elements
             TabLayout tabLayout = view.findViewById(R.id.tabLayout);
@@ -46,7 +60,15 @@ public class CommunityPageFragment extends Fragment {
 
             // Link the TabLayout to the ViewPager
             tabLayout.setupWithViewPager(viewPager);
+
+            // Set up click listener for the three dots icon
+            ImageView menuIcon = view.findViewById(R.id.menuIcon);
+            menuIcon.setOnClickListener(v -> showPopupMenu(v));
         }
+
+        ImageView menuIcon = view.findViewById(R.id.menuIcon);
+        menuIcon.setOnClickListener(v -> showPopupMenu(v));
+
         return view;
     }
 
@@ -54,25 +76,33 @@ public class CommunityPageFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         DocumentReference docRef = db.collection("Community").document(communityID);
 
-// Retrieve the data
+        // Retrieve the data
         docRef.get().addOnCompleteListener(task -> {
             if (task.isSuccessful()) {
                 DocumentSnapshot document = task.getResult();
                 if (document.exists()) {
                     // Convert the document snapshot to a Community object
-                    Community communityData = document.toObject(Community.class);
+                    communityData = document.toObject(Community.class);
 
                     if (communityData != null) {
                         // Now you can use the communityData as needed
-
-                        TextView communityNameTextView = getView().findViewById(R.id.communityTitleTextView);
-                        TextView communityDescriptionTextView = getView().findViewById(R.id.communityDescriptionTextView);
-                        TextView communityMemberCountTextView = getView().findViewById(R.id.memberCountTextView);
+                        communityNameTextView = getView().findViewById(R.id.communityTitleTextView);
+                        communityDescriptionTextView = getView().findViewById(R.id.communityDescriptionTextView);
+                        communityMemberCountTextView = getView().findViewById(R.id.memberCountTextView);
                         communityNameTextView.setText(communityData.getTitle());
                         communityDescriptionTextView.setText(communityData.getDescription());
-                        communityMemberCountTextView.setText("Member :"+ communityData.getMemberCount());
+                        communityMemberCountTextView.setText("Member :" + communityData.getMemberCount());
+                        String creatorID = communityData.getCreatorId();
 
+                        userInstance = User.getInstance();
+                        String userID = userInstance.getUserid();
 
+                        // Check if the userID is the same as the creatorID
+                        if (userID != null && userID.equals(creatorID)) {
+                            // If true, the current user is the creator, you can show the three dots icon
+                            ImageView menuIcon = getView().findViewById(R.id.menuIcon);
+                            menuIcon.setVisibility(View.VISIBLE);
+                        }
                         // Add other fields as needed
                     } else {
                         // Handle the case where the data couldn't be converted to a Community object
@@ -89,6 +119,104 @@ public class CommunityPageFragment extends Fragment {
             }
         });
     }
+
+    private void showPopupMenu(View view) {
+        PopupMenu popupMenu = new PopupMenu(requireContext(), view);
+        popupMenu.inflate(R.menu.community_options_menu); // Create a menu resource file (res/menu/community_options_menu.xml)
+
+        // Set up click listener for menu items
+        popupMenu.setOnMenuItemClickListener(item -> {
+            switch (item.getItemId()) {
+                case R.id.menu_edit:
+                    showEditDialog();
+                    return true;
+                case R.id.menu_delete:
+                    // Handle the delete option
+                    // Implement the delete functionality
+                    return true;
+                default:
+                    return false;
+            }
+        });
+
+        // Show the popup menu
+        popupMenu.show();
+    }
+
+    private void showEditDialog() {
+        // Create an AlertDialog for editing community title and description
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Edit Community");
+
+        // Set up the layout for the dialog
+        View editDialogView = LayoutInflater.from(requireContext()).inflate(R.layout.edit_community_dialog, null);
+        EditText editTitleEditText = editDialogView.findViewById(R.id.editTitleEditText);
+        EditText editDescriptionEditText = editDialogView.findViewById(R.id.editDescriptionEditText);
+
+        // Use the communityData obtained in retrieveCommunityData to prepopulate the EditText fields
+        if (communityData != null) {
+            editTitleEditText.setText(communityData.getTitle());
+            editDescriptionEditText.setText(communityData.getDescription());
+        }
+
+        builder.setView(editDialogView);
+
+        builder.setPositiveButton("Save", (dialog, which) -> {
+            // Handle the save button click
+            String newTitle = editTitleEditText.getText().toString().trim();
+            String newDescription = editDescriptionEditText.getText().toString().trim();
+
+            // Check if the new title and description are not empty
+            if (!TextUtils.isEmpty(newTitle) && !TextUtils.isEmpty(newDescription)) {
+                // Update the community data in the database
+                updateCommunityData(newTitle, newDescription);
+            } else {
+                // Show an error message or handle the case where title or description is empty
+                Toast.makeText(requireContext(), "Title and description cannot be empty", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+        builder.setNegativeButton("Cancel", (dialog, which) -> {
+            // Handle the cancel button click
+            dialog.dismiss();
+        });
+
+        builder.show();
+    }
+
+    private void updateCommunityData(String newTitle, String newDescription) {
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+        if (communityData != null) {
+            String communityId = communityData.getCommunityId(); // Assuming you have a method getId() in your Community class
+
+            // Create a map with the updated data
+            Map<String, Object> updatedData = new HashMap<>();
+            updatedData.put("title", newTitle);
+            updatedData.put("description", newDescription);
+
+            // Update the document in the "Community" collection
+            db.collection("Community")
+                    .document(communityId)
+                    .update(updatedData)
+                    .addOnSuccessListener(aVoid -> {
+
+                        if (communityData != null) {
+                            communityNameTextView.setText(newTitle);
+                            communityDescriptionTextView.setText(newDescription);
+                            communityData.setTitle(newTitle);
+                            communityData.setDescription(newDescription);
+                        }
+                        //Toast.makeText(requireContext(), "Community updated successfully", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnFailureListener(e -> {
+                        Toast.makeText(requireContext(), "Failed to update community", Toast.LENGTH_SHORT).show();
+                    });
+        }
+    }
+
+
 
 
 }
