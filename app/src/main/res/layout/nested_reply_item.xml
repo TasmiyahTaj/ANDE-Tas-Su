@@ -1,0 +1,42 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="8dp">
+
+    <!-- User Profile Picture -->
+    <ImageView
+        android:id="@+id/nestedUserProfileImageView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/profile"
+        android:scaleType="centerCrop" />
+
+    <!-- Nested Reply Content -->
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:layout_marginStart="8dp">
+
+        <!-- Username -->
+        <TextView
+            android:id="@+id/nestedUserNameTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nested Username"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <!-- Nested Reply Text -->
+        <TextView
+            android:id="@+id/nestedReplyTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nested Reply Text"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

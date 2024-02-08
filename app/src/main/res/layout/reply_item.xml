@@ -54,15 +54,36 @@
         android:orientation="vertical"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"/>
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="16dp"/>
 
-    <!-- Reply Button -->
-    <Button
-        android:id="@+id/replyButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Reply"
-        android:layout_below="@id/replyTextView"
-        android:layout_alignParentEnd="true"/>
+    <!-- Reply Section -->
+    <LinearLayout
+        android:layout_width="299dp"
+        android:layout_height="35dp"
+        android:gravity="end"
+        android:orientation="horizontal">
+
+        <!-- User Profile Picture of Current User -->
+
+        <!-- Text: Reply to (the main reply username) -->
+
+        <ImageView
+            android:id="@+id/currentUserProfileImageView"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/profile" />
+
+        <TextView
+            android:id="@+id/replyToTextView"
+            android:layout_width="219dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp"
+            android:text="Reply to "
+            android:textColor="@color/pay_button_generic_background_color_dark"
+            android:textSize="14sp" />
+
+    </LinearLayout>
 
 </LinearLayout>
