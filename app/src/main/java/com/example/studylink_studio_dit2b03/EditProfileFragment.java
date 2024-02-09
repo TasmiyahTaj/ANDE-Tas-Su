@@ -223,6 +223,7 @@ public class EditProfileFragment extends Fragment {
                             public void onSuccess(Uri uri) {
                                 // Update the profile picture URL in the database
                                 updateUserProfilePicture(uri.toString());
+                                userInstance.setProfilePicUrl(uri.toString());
                             }
                         });
                     }
@@ -435,11 +436,21 @@ public class EditProfileFragment extends Fragment {
             String newInstitution = institutionSpinner.getSelectedItem().toString();
             String newCourse = courseSpinner.getSelectedItem().toString();
             updateStudentInformation(newUsername, newInstitution, newCourse);
+            userInstance.setUsername(newUsername);
+            Student student=userInstance.getStudent();
+            student.setCourseid(newCourse);
+            student.setInstitutionid(newInstitution);
+
             Toast.makeText(getActivity(), "Profile changes saved successfully", Toast.LENGTH_SHORT).show();
         }
         // If the user is a tutor, update their information in the Tutor collection
         else if (roleId == 2) { // Tutor
             updateTutorInformation(newUsername, newQualification, newSpecialization);
+            userInstance.setUsername(newUsername);
+            Tutor tutor=userInstance.getTutor();
+            tutor.setQualification(newQualification);
+            tutor.setSpecialised(newSpecialization);
+
             Toast.makeText(getActivity(), "Profile changes saved successfully", Toast.LENGTH_SHORT).show();
         }
         if (selectedImageUri != null) {
