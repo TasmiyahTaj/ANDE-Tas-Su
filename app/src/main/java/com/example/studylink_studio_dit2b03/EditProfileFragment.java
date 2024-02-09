@@ -1,11 +1,14 @@
 package com.example.studylink_studio_dit2b03;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -23,6 +27,10 @@ import androidx.fragment.app.Fragment;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.reflect.TypeToken;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
@@ -250,8 +258,169 @@ public class EditProfileFragment extends Fragment {
                 });
     }
     private void changePassword() {
-        // Implement change password functionality
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Change Password");
+        builder.setMessage("Are you sure you want to change your password?");
+
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                promptForOldPassword();
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        final AlertDialog dialog = builder.create(); // Declare dialog as final
+        dialog.show();
     }
+
+    private void promptForOldPassword() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Enter Old Password");
+
+        // Set up the input
+        final EditText input = new EditText(requireContext());
+        input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        builder.setView(input);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String oldPassword = input.getText().toString();
+                // Verify the old password with the database
+                verifyOldPassword(oldPassword, new OnPasswordVerificationListener() {
+                    @Override
+                    public void onVerificationSuccess() {
+                        promptForNewPassword();
+                    }
+
+                    @Override
+                    public void onVerificationFailure() {
+                        Toast.makeText(requireContext(), "Incorrect old password", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+    private void promptForNewPassword() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Enter New Password");
+
+        // Set up the input for new password
+        final EditText newPasswordInput = new EditText(requireContext());
+        newPasswordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        newPasswordInput.setHint("New Password");
+
+        // Set up the input for confirming new password
+        final EditText confirmPasswordInput = new EditText(requireContext());
+        confirmPasswordInput.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        confirmPasswordInput.setHint("Confirm New Password");
+
+        // Create a layout to hold the EditText fields
+        LinearLayout layout = new LinearLayout(requireContext());
+        layout.setOrientation(LinearLayout.VERTICAL);
+        layout.addView(newPasswordInput);
+        layout.addView(confirmPasswordInput);
+        builder.setView(layout);
+
+        // Set up the buttons
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String newPassword = newPasswordInput.getText().toString();
+                String confirmPassword = confirmPasswordInput.getText().toString();
+
+                // Check if passwords match
+                if (newPassword.equals(confirmPassword)) {
+                    // Update the password in the database
+                    updatePassword(newPassword);
+                    Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(requireContext(), "Passwords do not match", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+    }
+
+
+    private void verifyOldPassword(final String oldPassword, final OnPasswordVerificationListener listener) {
+        // Get the reference to the current user in your authentication system
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Re-authenticate the user with their current password to verify it
+        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), oldPassword);
+        user.reauthenticate(credential)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Password re-authenticated successfully
+                        // You can handle this case as the old password being correct
+                        promptForNewPassword();
+                        listener.onVerificationSuccess();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Re-authentication failed, handle this as incorrect old password
+                        Toast.makeText(requireContext(), "Incorrect old password", Toast.LENGTH_SHORT).show();
+                        listener.onVerificationFailure();
+                    }
+                });
+    }
+
+    // Define an interface to handle password verification callbacks
+    interface OnPasswordVerificationListener {
+        void onVerificationSuccess();
+        void onVerificationFailure();
+    }
+
+    private void updatePassword(String newPassword) {
+        // Get the reference to the current user in your authentication system
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+        // Update the user's password with the new password
+        user.updatePassword(newPassword)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        // Password updated successfully
+                        Toast.makeText(requireContext(), "Password updated successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        // Handle failure to update password
+                        Toast.makeText(requireContext(), "Failed to update password", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     private void saveProfileChanges() {
         // Retrieve updated information
         String newUsername = usernameEditText.getText().toString();
