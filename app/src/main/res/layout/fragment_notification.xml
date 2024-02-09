@@ -1,17 +1,90 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<!-- res/layout/fragment_notification.xml -->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".NotificationFragment">
+    android:orientation="vertical">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Notification"
-        android:textSize="26dp"
-        android:layout_gravity="center"
-        />
+        android:text="Notifications"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:padding="16dp"
+        android:background="#F4C2C2"
+        android:textColor="@android:color/white"/>
 
-</RelativeLayout>
+    <!-- First Notification -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ecf0f1"
+        android:padding="8dp"
+        android:layout_marginBottom="4dp">
+
+        <ImageView
+            android:id="@+id/notificationIcon1"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/baseline_add_reaction_24"/>
+
+        <TextView
+            android:id="@+id/notificationText1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/notificationIcon1"
+            android:text="Rang Rang commented on your post."
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <!-- Second Notification -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ecf0f1"
+        android:padding="8dp"
+        android:layout_margin="4dp">
+
+        <ImageView
+            android:id="@+id/notificationIcon2"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/baseline_add_reaction_24"/>
+
+        <TextView
+            android:id="@+id/notificationText2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/notificationIcon2"
+            android:text="Tas replied your post."
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+    <!-- Third Notification -->
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#ecf0f1"
+        android:padding="8dp"
+        android:layout_margin="4dp">
+
+        <ImageView
+            android:id="@+id/notificationIcon3"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:src="@drawable/baseline_notifications_24"/>
+
+        <TextView
+            android:id="@+id/notificationText3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_toEndOf="@id/notificationIcon3"
+            android:text="su uploaded notes inside webdev community."
+            android:textSize="16sp"/>
+    </RelativeLayout>
+
+</LinearLayout>
