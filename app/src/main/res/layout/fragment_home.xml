@@ -4,10 +4,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".HomeFragment">
+
+    <TextView
+        android:id="@+id/textStudyLink"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STUDY LINK"
+        android:textSize="32sp"
+        android:textStyle="bold"
+        android:textColor="#F4C2C2"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="16dp"
+    />
+
     <TextView
         android:id = "@+id/homepageTrending"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textStudyLink"
         android:text="Trending Communities"
         android:textSize="26dp"
         android:layout_marginTop="20dp"

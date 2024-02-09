@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/communityTitleTextView"
         android:layout_marginTop="8dp"
-        android:layout_marginStart="16dp"
+        android:layout_margin="16dp"
         android:textColor="@android:color/black"
         android:text="CommunityDescription"/>
 
