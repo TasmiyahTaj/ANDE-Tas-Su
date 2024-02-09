@@ -4,6 +4,9 @@ public class Tutor {
     private String userid,username,qualification,specialised;
     private int yearsOfExperience;
 private long account;
+    public Tutor() {
+        // Default constructor required for Firestore deserialization
+    }
     public Tutor(String userid, String username, String qualification, String specialised, int yearsOfExperience,long account) {
         this.userid = userid;
         this.username = username;

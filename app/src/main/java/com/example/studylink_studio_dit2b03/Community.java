@@ -15,7 +15,12 @@ public class Community {
     // Default constructor required for Firestore
     public Community() {
     }
+    public Community(String title,int memberCount,String creatorId) {
+        this.title=title;
+        this.memberCount=memberCount;
+        this.creatorId=creatorId;
 
+    }
     public String getCommunityId() {
         return communityId;
     }

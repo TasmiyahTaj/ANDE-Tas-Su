@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="8dp"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:background="@color/border_color">
+
+        <TextView
+            android:id="@+id/community_title_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Community Title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="#000000" /> <!-- Set text color to black -->
+
+
+        <TextView
+            android:id="@+id/member_count_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/community_title_text_view"
+            android:layout_marginTop="8dp"
+            android:text="Member count"
+            android:textSize="16sp"
+            android:textColor="#000000" /> <!-- Set text color to black -->
+
+        <TextView
+            android:id="@+id/creator_name_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/member_count_text_view"
+            android:layout_marginTop="8dp"
+            android:text="Tutor name"
+            android:textSize="16sp"
+            android:textColor="#000000" />
+
+    </RelativeLayout>
+</androidx.cardview.widget.CardView>
