@@ -34,6 +34,9 @@ public class OtherUser extends Fragment {
     private static final String TAG = "OtherUserFragment";
     private FirebaseAuth auth;
     private FirebaseUser firebaseUser;
+    private RecyclerView questionRecyclerView;
+    private QuestionAdapter questionAdapter;
+    private List<Question> questionList;
     private FirebaseFirestore db;
     private String userId;
     private int roleId;
@@ -57,6 +60,12 @@ public class OtherUser extends Fragment {
                 view = inflater.inflate(R.layout.fragment_student_profile, container, false);
                 profile_username = view.findViewById(R.id.txtusername);
                 institution = view.findViewById(R.id.schooltxt);
+                questionRecyclerView = view.findViewById(R.id.questionRecyclerView);
+                questionList = new ArrayList<>();
+                questionAdapter = new QuestionAdapter(questionList);
+                questionRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                questionRecyclerView.setAdapter(questionAdapter);
+
             } else if (roleId == 2) {
                 view = inflater.inflate(R.layout.fragment_tutor_profile, container, false);
                 profile_username = view.findViewById(R.id.txtusername);
@@ -69,6 +78,7 @@ public class OtherUser extends Fragment {
                 requireActivity().finish();
             }
             userProfile = view.findViewById(R.id.yourProfile);
+            hideButtonsBasedOnRole(view);
         } else {
             Log.e(TAG, "Arguments bundle is null");
         }
@@ -104,7 +114,19 @@ public class OtherUser extends Fragment {
                 })
                 .addOnFailureListener(e -> Log.e(TAG, "Error fetching user details: " + e.getMessage()));
     }
-
+    private void hideButtonsBasedOnRole(View view) {
+        // Hide buttons based on the role
+        if (roleId == 1) {
+            view.findViewById(R.id.settingsImg).setVisibility(View.GONE);
+            view.findViewById(R.id.btnEditProfile).setVisibility(View.GONE);
+            view.findViewById(R.id.btnShareProfile).setVisibility(View.GONE);
+        } else if (roleId == 2) {
+            // If user is a tutor, hide buttons in the tutor profile layout
+            view.findViewById(R.id.settingsImg).setVisibility(View.GONE);
+            view.findViewById(R.id.btnEditProfile).setVisibility(View.GONE);
+            view.findViewById(R.id.btnShareProfile).setVisibility(View.GONE);
+        }
+    }
     private void loadStudentDetails(String userId) {
         // Query Firestore to get student details
         db.collection("Student")
@@ -132,8 +154,8 @@ public class OtherUser extends Fragment {
                     if (documentSnapshot.exists()) {
                         Tutor tutor = documentSnapshot.toObject(Tutor.class);
                         if (tutor != null) {
-                            description.setText(tutor.getSpecialised() + ", " + tutor.getQualification());
-                            years.setText(String.valueOf(tutor.getYearsOfExperience()));
+                            description.setText(tutor.getSpecialised() + " - " + tutor.getQualification());
+                            years.setText("Experience:"+  String.valueOf(tutor.getYearsOfExperience()));
                         }
                     } else {
                         Log.e(TAG, "Tutor document does not exist");
