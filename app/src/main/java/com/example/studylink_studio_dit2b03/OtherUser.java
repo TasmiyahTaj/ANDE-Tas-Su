@@ -30,12 +30,13 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 public class OtherUser extends Fragment {
-
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
     private static final String TAG = "OtherUserFragment";
     private FirebaseAuth auth;
     private FirebaseUser firebaseUser;
     private RecyclerView questionRecyclerView;
-    private QuestionAdapter questionAdapter;
+    private QuestionAdapter adapter;
     private List<Question> questionList;
     private FirebaseFirestore db;
     private String userId;
@@ -62,15 +63,22 @@ public class OtherUser extends Fragment {
                 institution = view.findViewById(R.id.schooltxt);
                 questionRecyclerView = view.findViewById(R.id.questionRecyclerView);
                 questionList = new ArrayList<>();
-                questionAdapter = new QuestionAdapter(questionList);
+                adapter = new QuestionAdapter(questionList);
                 questionRecyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-                questionRecyclerView.setAdapter(questionAdapter);
-
+                questionRecyclerView.setAdapter(adapter);
+                displayQuestionsByStudent(userId);
             } else if (roleId == 2) {
                 view = inflater.inflate(R.layout.fragment_tutor_profile, container, false);
                 profile_username = view.findViewById(R.id.txtusername);
                 description = view.findViewById(R.id.tutorInfo);
                 years = view.findViewById(R.id.yearsOfExperience);
+                viewPager = view.findViewById(R.id.viewPager);
+                tabLayout = view.findViewById(R.id.tabLayout);
+                ProfilePagerAdapter pagerAdapter = new ProfilePagerAdapter(getChildFragmentManager(), userId);
+                viewPager.setAdapter(pagerAdapter);
+
+                // Link the TabLayout to the ViewPager
+                tabLayout.setupWithViewPager(viewPager);
             } else {
                 // Redirect to login activity or handle accordingly
                 Intent intent = new Intent(requireContext(), Login.class);
@@ -85,7 +93,65 @@ public class OtherUser extends Fragment {
 
         return view;
     }
+    private void displayQuestionsByStudent(String userId) {
+        // Query Firestore to get questions posted by the student
+        db.collection("Questions")
+                .whereEqualTo("userID", userId)
+                .orderBy("createdAt", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        // Clear the existing questionList
+                        questionList.clear();
 
+                        // Iterate through the result and populate your RecyclerView adapter
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            // Extract question details and add them to your RecyclerView adapter
+                            String title = document.getString("title");
+                            String description = document.getString("description");
+                            String communityId = document.getString("communityID");
+                            String questionImage = document.getString("questionImageUrl");
+                            String questionId = document.getId();
+
+                            // Retrieve community title and tutor ID
+                            db.collection("Community")
+                                    .document(communityId)
+                                    .get()
+                                    .addOnSuccessListener(communitySnapshot -> {
+                                        if (communitySnapshot.exists()) {
+                                            String communityTitle = communitySnapshot.getString("title");
+                                            String tutorId = communitySnapshot.getString("creatorId");
+
+                                            // Retrieve tutor name
+                                            db.collection("Tutor")
+                                                    .document(tutorId)
+                                                    .get()
+                                                    .addOnSuccessListener(tutorSnapshot -> {
+                                                        if (tutorSnapshot.exists()) {
+                                                            String tutorName = tutorSnapshot.getString("username");
+                                                            // Add the question to the list
+                                                            if(questionImage!=null){
+                                                                questionList.add(new Question(questionId ,userId, communityTitle, title, description, tutorName,questionImage));
+
+                                                            }else{         questionList.add(new Question(questionId ,userId, communityTitle, title, description, tutorName));}
+
+                                                            Log.e("ProfileFragment", "question by me " + questionList.size() + title + tutorName);
+
+                                                            // Ensure UI updates are on the main thread
+                                                            requireActivity().runOnUiThread(() -> adapter.notifyDataSetChanged());
+                                                        }
+                                                    });
+                                        }
+                                    });
+
+                        }
+                    } else {
+                        Log.e("Firestore from profile", "Error getting questions: " + task.getException().getLocalizedMessage());
+
+                    }
+                });
+
+    }
     private void loadUserDetails(String userId, int roleId) {
         // Query Firestore to get user details
         db.collection("users")

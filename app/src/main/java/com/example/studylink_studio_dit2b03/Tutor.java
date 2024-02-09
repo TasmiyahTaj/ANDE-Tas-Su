@@ -60,7 +60,7 @@ private long account;
         return account;
     }
 
-    public void setAccount(int account) {
+    public void setAccount(long account) {
         this.account = account;
     }
 }
