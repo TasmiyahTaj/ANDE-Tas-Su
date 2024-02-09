@@ -92,6 +92,14 @@
             android:layout_margin="20dp"
             android:visibility="gone" />
 
+        <!-- Save Button -->
+        <Button
+            android:id="@+id/button_save"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save"
+            android:layout_margin="20dp" />
+
         <!-- Change Password Button -->
         <Button
             android:id="@+id/button_change_password"
