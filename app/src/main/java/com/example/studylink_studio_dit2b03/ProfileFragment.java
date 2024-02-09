@@ -90,19 +90,19 @@ public class ProfileFragment extends Fragment {
 
         userProfile = view.findViewById(R.id.yourProfile);
         Button editProfileBtn = view.findViewById(R.id.btnEditProfile);
-        editProfileBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Handle click event for Edit Profile button
-                // Navigate to the EditProfileFragment
-                EditProfileFragment editProfileFragment = new EditProfileFragment();
-                // Begin the transaction
-                requireActivity().getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container, editProfileFragment)
-                        .addToBackStack(null)
-                        .commit();
-            }
-        });
+//        editProfileBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                // Handle click event for Edit Profile button
+//                // Navigate to the EditProfileFragment
+//                EditProfileFragment editProfileFragment = new EditProfileFragment();
+//                // Begin the transaction
+//                requireActivity().getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.container, editProfileFragment)
+//                        .addToBackStack(null)
+//                        .commit();
+//            }
+//        });
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

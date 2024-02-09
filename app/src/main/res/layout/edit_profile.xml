@@ -31,7 +31,7 @@
             android:id="@+id/spinner_institution"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:prompt="Select Institution"
+            android:hint="Select Institution"
             android:layout_margin="20dp"
             android:visibility="visible" />
 
@@ -40,7 +40,7 @@
             android:id="@+id/spinner_course"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:prompt="Select Course"
+            android:hint="Select Course"
             android:layout_margin="20dp"
             android:visibility="visible" />
 
@@ -59,7 +59,7 @@
             android:id="@+id/spinner_qualification"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:prompt="Select Qualification"
+            android:hint="Select Qualification"
             android:layout_margin="20dp"
             android:visibility="gone" />
 
@@ -68,7 +68,7 @@
             android:id="@+id/spinner_specialization"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:prompt="Select Specialization"
+            android:hint="Select Specialization"
             android:layout_margin="20dp"
             android:visibility="gone" />
 
