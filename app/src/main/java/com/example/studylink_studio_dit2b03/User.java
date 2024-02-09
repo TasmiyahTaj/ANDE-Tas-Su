@@ -35,7 +35,12 @@ public class User {
         this.username = username;
         this.roleid = roleid;
     }
-
+    public User(String userid,String username, String email,String profilePicUrl, int roleid) {
+        this.userid = userid;
+       this.profilePicUrl=profilePicUrl;
+        this.username = username;
+        this.roleid = roleid;
+    }
     public String getUserid() {
         return userid;
     }

@@ -45,12 +45,20 @@ public class ProfileFragment extends Fragment {
     private ImageView userProfile;
     User userInstance = User.getInstance();
     View view;
+    private String searchedUserID;
+    private int searchedRoleID;
     private List<Question> questionList = new ArrayList<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         userInstance = User.getInstance();
+        Bundle args = getArguments();
+        if (args != null) {
+            // Extract searchedUserID and roleID
+            searchedUserID = args.getString("searchedUserID");
+            searchedRoleID = args.getInt("searchedRoleID");
+        }
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

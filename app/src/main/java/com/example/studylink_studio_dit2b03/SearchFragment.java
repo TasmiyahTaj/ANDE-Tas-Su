@@ -1,81 +1,81 @@
 package com.example.studylink_studio_dit2b03;
-
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SearchView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+import androidx.appcompat.widget.SearchView; // Import from androidx.appcompat.widget
+import androidx.viewpager.widget.ViewPager;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class SearchFragment extends Fragment {
 
+    private ViewPager viewPager;
+    private TabLayout tabLayout;
     private SearchView searchView;
-    private RecyclerView searchResultsRecyclerView;
-    private List<String> searchResults; // Example list for search results
+    private static final String TAG = "SearchFragment";
+
+    public SearchFragment() {
+        // Required empty public constructor
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_search, container, false);
 
-        // Initialize UI components
-        searchView = view.findViewById(R.id.searchView);
-        searchResultsRecyclerView = view.findViewById(R.id.searchResultsRecyclerView);
+        viewPager = view.findViewById(R.id.view_pager);
+        tabLayout = view.findViewById(R.id.tab_layout);
+        searchView = view.findViewById(R.id.search_view);
 
-        // Configure the RecyclerView
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
-        searchResultsRecyclerView.setLayoutManager(layoutManager);
-        searchResults = new ArrayList<>(); // Initialize with empty list
-        // Initialize and set the adapter for RecyclerView
-        SearchResultsAdapter adapter = new SearchResultsAdapter(searchResults);
-        searchResultsRecyclerView.setAdapter(adapter);
+        setupViewPager(viewPager);
+        tabLayout.setupWithViewPager(viewPager);
+        setupSearchView();
 
-        // Set up the SearchView
+        return view;
+    }
+
+    private void setupViewPager(ViewPager viewPager) {
+        SearchPagerAdapter adapter = new SearchPagerAdapter(getChildFragmentManager());
+        adapter.addFragment(new SearchUsersFragment(), "Users");
+        adapter.addFragment(new SearchCommunityFragment(), "Community");
+        viewPager.setAdapter(adapter);
+    }
+
+    private void setupSearchView() {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // Perform search when user submits query
-                performSearch(query);
+                Log.d(TAG, "onQueryTextSubmit: Query submitted: " + query);
+
+                int selectedTabIndex = tabLayout.getSelectedTabPosition();
+                Fragment currentFragment = getChildFragmentManager().findFragmentByTag("android:switcher:" + R.id.view_pager + ":" + selectedTabIndex);
+
+                if (currentFragment instanceof SearchUsersFragment) {
+                    List<User> usersResult = ((SearchUsersFragment) currentFragment).performSearch(query);
+                    // Update the UI with the search results in the SearchUsersFragment
+                    ((SearchUsersFragment) currentFragment).updateSearchResults(usersResult);
+                } else if (currentFragment instanceof SearchCommunityFragment) {
+                    List<Community> communityResult = ((SearchCommunityFragment) currentFragment).performSearch(query);
+                    // Update the UI with the search results in the SearchCommunityFragment
+                    ((SearchCommunityFragment) currentFragment).updateSearchResults(communityResult);
+                }
+
                 return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                // Perform search as user types (optional)
-                // performSearch(newText);
-                return true;
+                // Implement any filtering logic here if needed
+                return false;
             }
         });
-
-        return view;
     }
 
-    private void performSearch(String query) {
-        // Implement search logic here
-        // For example, update the searchResults list with matching results
-        // and notify the adapter
-        List<String> matchingResults = searchInData(query); // Implement this method
-        searchResults.clear();
-        searchResults.addAll(matchingResults);
-        searchResultsRecyclerView.setVisibility(View.VISIBLE);
-        searchResultsRecyclerView.getAdapter().notifyDataSetChanged();
-    }
 
-    // Method to simulate search in data
-    private List<String> searchInData(String query) {
-        // Implement your actual search logic here
-        // For now, returning some dummy data
-        List<String> dummyData = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            dummyData.add("Result " + i);
-        }
-        return dummyData;
-    }
 }

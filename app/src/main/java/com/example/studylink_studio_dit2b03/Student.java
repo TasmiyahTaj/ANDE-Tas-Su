@@ -28,7 +28,9 @@ public class Student {
         this.username = username;
     }
 
-
+    public Student() {
+        // Default constructor required for Firestore deserialization
+    }
     public String getInstitutionid() {
         return institution;
     }

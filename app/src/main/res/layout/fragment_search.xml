@@ -1,35 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".SearchFragment">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <!-- SearchView widget -->
     <androidx.appcompat.widget.SearchView
-        android:id="@+id/searchView"
+        android:id="@+id/search_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:iconifiedByDefault="false" />
+        android:queryHint="Search users and community"
+        android:background="@drawable/reply_background"/>
 
-    <!-- TabLayout for toggling between user and community search results -->
     <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tabLayout"
+        android:id="@+id/tab_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/searchView"
-        android:background="?attr/colorPrimary"
-        app:tabGravity="fill"
-        app:tabIndicatorColor="@android:color/white"
+        android:layout_below="@id/search_view"
         app:tabMode="fixed"
-        app:tabSelectedTextColor="@android:color/white"
-        app:tabTextColor="@android:color/white" />
+        app:tabGravity="fill"/>
 
-    <!-- ViewPager for displaying search results -->
     <androidx.viewpager.widget.ViewPager
-        android:id="@+id/viewPager"
+        android:id="@+id/view_pager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/tabLayout" />
+        android:layout_below="@id/tab_layout"/>
 
 </RelativeLayout>

@@ -114,7 +114,7 @@ public class SignUp extends AppCompatActivity implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.btnSignUp:
                 // Handle SignUp button click
-                sUsername = username.getText().toString();
+                sUsername = username.getText().toString().toLowerCase();
                 sEmail = email.getText().toString();
                 sPwd = password.getText().toString();
                 sCfmPwd = cfmPwd.getText().toString();

@@ -42,7 +42,7 @@ public class NotesFragmentpfp extends Fragment {
             Log.d("userID", tutorId);
             new NotesFragmentpfp.FetchNotesTask().execute(tutorId);
         } else {
-            Log.d("communityid", "no data");
+            Log.d("userID", "no data");
         }
 
         return view;
