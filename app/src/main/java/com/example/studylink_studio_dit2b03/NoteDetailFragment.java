@@ -15,6 +15,7 @@ import android.text.Editable;
 import android.text.InputFilter;
 import android.text.Spanned;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -156,11 +157,14 @@ public class NoteDetailFragment extends Fragment {
                                             int year = Integer.parseInt(parts[1]);
                                             if (month < 1 || month > 12 || year < 26 || year > 39) {
                                                 // Invalid month or year, clear the input
+                                                Log.e("Validation", "Invalid month or year: " + month + "/" + year);
                                                 Toast.makeText(requireContext(), "Invalid expiry date", Toast.LENGTH_SHORT).show();
-
+                                            } else {
+                                                Log.d("Validation", "Valid expiry date: " + month + "/" + year);
                                             }
-                                        } catch (NumberFormatException e) {
-                                            // Invalid input format, clear the input
+                                        } catch (Exception e) {
+                                            // Exception occurred, clear the input
+                                            Log.e("Validation", "Exception occurred: " + e.getMessage());
                                             Toast.makeText(requireContext(), "Invalid expiry date", Toast.LENGTH_SHORT).show();
                                             expiryDateEditText.setText("");
                                         }
@@ -168,6 +172,7 @@ public class NoteDetailFragment extends Fragment {
                                 }
                             }
                         });
+
 
 
 

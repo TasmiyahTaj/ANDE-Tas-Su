@@ -103,6 +103,7 @@ public class ProfileFragment extends Fragment {
                         .commit();
             }
         });
+
         settingBtn = view.findViewById(R.id.settingsImg);
         settingBtn.setOnClickListener(new View.OnClickListener() {
             @Override
