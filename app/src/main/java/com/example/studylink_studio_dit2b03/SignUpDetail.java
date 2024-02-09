@@ -29,7 +29,13 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.ArrayList;
 import java.util.List;
-
+import android.content.Context;
+import android.content.SharedPreferences;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.List;
 public class SignUpDetail extends AppCompatActivity{
     FirebaseStorage storage = FirebaseStorage.getInstance();
     StorageReference storageRef = storage.getReference();
@@ -278,7 +284,10 @@ public class SignUpDetail extends AppCompatActivity{
         institutions.add("Nanyang Technological University");
         institutions.add("Singapore Management University");
 
+        String institutionsJson = new Gson().toJson(institutions);
 
+        // Save the JSON string in shared preferences
+        saveDataToSharedPreferences("institutions", institutionsJson);
         ArrayAdapter<String> institutionAdapter = new ArrayAdapter<>(SignUpDetail.this,
                 android.R.layout.simple_spinner_dropdown_item, institutions);
         institutionSpinner.setAdapter(institutionAdapter);
@@ -292,8 +301,8 @@ public class SignUpDetail extends AppCompatActivity{
         courses.add("Chemical Engineering");
         courses.add("Media and Arts");
         courses.add("BioMedical Engineering");
-
-
+        String coursesJson = new Gson().toJson(courses);
+        saveDataToSharedPreferences("courses", coursesJson);
         ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(SignUpDetail.this,
                 android.R.layout.simple_spinner_dropdown_item, courses);
         courseSpinner.setAdapter(courseAdapter);
@@ -309,7 +318,10 @@ public class SignUpDetail extends AppCompatActivity{
         educationLevels.add("Bachelor's Degree");
         educationLevels.add("Master's Degree");
         educationLevels.add("Ph.D.");
+        String educationJson = new Gson().toJson(educationLevels);
 
+        // Save the JSON string in shared preferences
+        saveDataToSharedPreferences("qualification", educationJson);
         ArrayAdapter<String> educationAdapter = new ArrayAdapter<>(SignUpDetail.this,
                 android.R.layout.simple_spinner_dropdown_item, educationLevels);
         educationSpinner.setAdapter(educationAdapter);
@@ -324,11 +336,22 @@ public class SignUpDetail extends AppCompatActivity{
         specializedCourses.add("Media and Arts");
         specializedCourses.add("BioMedical Engineering");
         specializedCourses.add("Marine Engineering");
+        String specializedCoursesJson = new Gson().toJson(specializedCourses);
+
+        // Save the JSON string in shared preferences
+        saveDataToSharedPreferences("specializations", specializedCoursesJson);
 
 
         ArrayAdapter<String> specializedCourseAdapter = new ArrayAdapter<>(SignUpDetail.this,
                 android.R.layout.simple_spinner_dropdown_item, specializedCourses);
         specializedCourseSpinner.setAdapter(specializedCourseAdapter);
+    }
+
+    private void saveDataToSharedPreferences(String key, String data) {
+        SharedPreferences sharedPreferences = getSharedPreferences("user_preferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(key, data);
+        editor.apply();
     }
 
 }

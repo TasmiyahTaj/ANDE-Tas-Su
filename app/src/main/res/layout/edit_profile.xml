@@ -1,0 +1,105 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <!-- Profile Picture -->
+        <ImageView
+            android:id="@+id/imageView_profile_picture"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/profile_pic"
+            android:onClick="onClick"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp" />
+
+        <!-- Username -->
+        <EditText
+            android:id="@+id/editText_username"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Username"
+            android:inputType="text"
+            android:layout_margin="20dp"/>
+
+        <!-- Institution Spinner (for students) -->
+        <Spinner
+            android:id="@+id/spinner_institution"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="Select Institution"
+            android:layout_margin="20dp"
+            android:visibility="visible" />
+
+        <!-- Course Spinner (for students) -->
+        <Spinner
+            android:id="@+id/spinner_course"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="Select Course"
+            android:layout_margin="20dp"
+            android:visibility="visible" />
+
+        <!-- Work Experience (for tutors) -->
+        <EditText
+            android:id="@+id/editText_work_experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Work Experience"
+            android:inputType="text"
+            android:layout_margin="20dp"
+            android:visibility="gone" />
+
+        <!-- Qualification Spinner (for tutors) -->
+        <Spinner
+            android:id="@+id/spinner_qualification"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="Select Qualification"
+            android:layout_margin="20dp"
+            android:visibility="gone" />
+
+        <!-- Specialization Spinner (for tutors) -->
+        <Spinner
+            android:id="@+id/spinner_specialization"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:prompt="Select Specialization"
+            android:layout_margin="20dp"
+            android:visibility="gone" />
+
+        <!-- Year of Experience (for tutors) -->
+        <EditText
+            android:id="@+id/editText_year_of_experience"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Year of Experience"
+            android:inputType="number"
+            android:layout_margin="20dp"
+            android:visibility="gone" />
+
+        <!-- Account Number (for tutors) -->
+        <EditText
+            android:id="@+id/editText_account_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Account Number"
+            android:inputType="number"
+            android:layout_margin="20dp"
+            android:visibility="gone" />
+
+        <!-- Change Password Button -->
+        <Button
+            android:id="@+id/button_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Change Password"
+            android:onClick="onClick"
+            android:layout_margin="20dp" />
+
+    </LinearLayout>
+</ScrollView>
