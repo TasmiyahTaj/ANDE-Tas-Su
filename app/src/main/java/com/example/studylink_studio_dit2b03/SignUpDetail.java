@@ -3,6 +3,7 @@ package com.example.studylink_studio_dit2b03;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -285,9 +286,9 @@ public class SignUpDetail extends AppCompatActivity{
         institutions.add("Singapore Management University");
 
         String institutionsJson = new Gson().toJson(institutions);
-
+        Log.d("Sign Up detail", institutionsJson);
         // Save the JSON string in shared preferences
-        saveDataToSharedPreferences("institutions", institutionsJson);
+        SharedPreferencesHelper.saveDataToSharedPreferences(SignUpDetail.this, "institutions", institutionsJson);
         ArrayAdapter<String> institutionAdapter = new ArrayAdapter<>(SignUpDetail.this,
                 android.R.layout.simple_spinner_dropdown_item, institutions);
         institutionSpinner.setAdapter(institutionAdapter);
@@ -302,7 +303,8 @@ public class SignUpDetail extends AppCompatActivity{
         courses.add("Media and Arts");
         courses.add("BioMedical Engineering");
         String coursesJson = new Gson().toJson(courses);
-        saveDataToSharedPreferences("courses", coursesJson);
+
+        SharedPreferencesHelper.saveDataToSharedPreferences(SignUpDetail.this, "courses", coursesJson);
         ArrayAdapter<String> courseAdapter = new ArrayAdapter<>(SignUpDetail.this,
                 android.R.layout.simple_spinner_dropdown_item, courses);
         courseSpinner.setAdapter(courseAdapter);
@@ -321,7 +323,8 @@ public class SignUpDetail extends AppCompatActivity{
         String educationJson = new Gson().toJson(educationLevels);
 
         // Save the JSON string in shared preferences
-        saveDataToSharedPreferences("qualification", educationJson);
+
+        SharedPreferencesHelper.saveDataToSharedPreferences(SignUpDetail.this, "qualification", educationJson);
         ArrayAdapter<String> educationAdapter = new ArrayAdapter<>(SignUpDetail.this,
                 android.R.layout.simple_spinner_dropdown_item, educationLevels);
         educationSpinner.setAdapter(educationAdapter);
@@ -338,20 +341,13 @@ public class SignUpDetail extends AppCompatActivity{
         specializedCourses.add("Marine Engineering");
         String specializedCoursesJson = new Gson().toJson(specializedCourses);
 
-        // Save the JSON string in shared preferences
-        saveDataToSharedPreferences("specializations", specializedCoursesJson);
 
-
+        SharedPreferencesHelper.saveDataToSharedPreferences(SignUpDetail.this, "specializations", specializedCoursesJson);
         ArrayAdapter<String> specializedCourseAdapter = new ArrayAdapter<>(SignUpDetail.this,
                 android.R.layout.simple_spinner_dropdown_item, specializedCourses);
         specializedCourseSpinner.setAdapter(specializedCourseAdapter);
     }
 
-    private void saveDataToSharedPreferences(String key, String data) {
-        SharedPreferences sharedPreferences = getSharedPreferences("user_preferences", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(key, data);
-        editor.apply();
-    }
+
 
 }

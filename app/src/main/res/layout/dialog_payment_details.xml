@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/account_number_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Account Number"
+        android:inputType="number"
+        android:maxLength="19" />
+
+    <EditText
+        android:id="@+id/csv_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="CSV"
+        android:inputType="number"
+        android:maxLength="3" />
+
+    <EditText
+        android:id="@+id/expiry_date_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="MM/YY"
+        android:inputType="number"
+        android:maxLength="5" />
+
+</LinearLayout>

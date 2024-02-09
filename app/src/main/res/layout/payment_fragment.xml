@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Tutor Details -->
+    <TextView
+        android:id="@+id/tutor_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutor Name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/tutor_account_number_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Tutor Account Number"
+        android:textSize="16sp" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Current User Details -->
+    <TextView
+        android:id="@+id/current_user_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/current_user_account_number_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Your Account Number"
+        android:textSize="16sp" />
+
+    <!-- Divider -->
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@android:color/darker_gray"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"/>
+
+    <!-- Note Details -->
+    <!-- Note Details -->
+    <TextView
+        android:id="@+id/note_name_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Note Name"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <!-- Price -->
+    <TextView
+        android:id="@+id/price_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Price: "
+        android:textSize="16sp" />
+
+    <!-- Confirm and Cancel Buttons -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="16dp">
+
+        <Button
+            android:id="@+id/confirm_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Confirm Payment" />
+
+        <Button
+            android:id="@+id/cancel_button"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Cancel" />
+    </LinearLayout>
+
+
+</LinearLayout>
