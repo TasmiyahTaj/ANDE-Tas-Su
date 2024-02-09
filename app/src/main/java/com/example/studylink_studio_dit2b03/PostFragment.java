@@ -342,8 +342,18 @@ public class PostFragment extends Fragment  {
         // Replace the current fragment with the destination fragment
         FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
         fm.replace(R.id.container, communityFragment).addToBackStack(null).commit();
+    }
 
+    private void navigateToCommunityDetailsStudent(String communityID){
+        Bundle bundle = new Bundle();
+        bundle.putString("communityID",communityID );
+        // Create the destination fragment and set arguments
+        Fragment communityFragment = new CommunityPageFragment();
+        communityFragment.setArguments(bundle);
 
+        // Replace the current fragment with the destination fragment
+        FragmentTransaction fm = getActivity().getSupportFragmentManager().beginTransaction();
+        fm.replace(R.id.container, communityFragment).addToBackStack(null).commit();
     }
 
     private void showImageSourceDialog() {
@@ -502,9 +512,16 @@ public class PostFragment extends Fragment  {
                                                             documentReference.update("questionId", questionId)
                                                                     .addOnSuccessListener(aVoid -> {
                                                                         // Handle success
+
+                                                                        chooseCommunityTextView.setText("");
+                                                                        title.setText("");
+                                                                        description.setText("");
+                                                                        resetImageView();
+
                                                                         question.setQuestionId(questionId);
                                                                         Log.d("Post", "Question added successfully with ID: " + questionId);
                                                                         // You can navigate to a success page or perform other actions
+                                                                        navigateToCommunityDetailsStudent(question.getCommunityID());
                                                                     })
                                                                     .addOnFailureListener(e -> {
                                                                         // Handle failure
@@ -533,9 +550,16 @@ public class PostFragment extends Fragment  {
                                             documentReference.update("questionId", questionId)
                                                     .addOnSuccessListener(aVoid -> {
                                                         // Handle success
+
+                                                        chooseCommunityTextView.setText("");
+                                                        title.setText("");
+                                                        description.setText("");
+                                                        resetImageView();
+
                                                         question.setQuestionId(questionId);
                                                         Log.d("Post", "Question added successfully with ID: " + questionId);
                                                         // You can navigate to a success page or perform other actions
+                                                        navigateToCommunityDetailsStudent(question.getCommunityID());
                                                     })
                                                     .addOnFailureListener(e -> {
                                                         // Handle failure
@@ -557,9 +581,20 @@ public class PostFragment extends Fragment  {
             // Handle the case when any of the fields is empty
             Log.e("Post", "Some fields are empty");
         }
+
+
     }
 
+    // Add this method to your fragment class
+    private void resetImageView() {
+        // Remove the image and hide the ImageView
+        attachedImage.setImageDrawable(null);
+        attachedImage.setVisibility(View.GONE);
+        buttonRemoveImage.setVisibility(View.GONE);
 
+        // Clear the selected image URI
+        selectedImageUri = null;
+    }
 
 }
 
