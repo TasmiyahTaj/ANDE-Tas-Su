@@ -295,13 +295,13 @@ public class HomeFragment extends Fragment {
     }
 
     private void sortQuestionsByTimestamp() {
-        Collections.sort(questionList, new Comparator<Question>() {
+        Collections.sort(questionList, Collections.reverseOrder(new Comparator<Question>() {
             @Override
             public int compare(Question q1, Question q2) {
                 // Assuming createdAt is of type Date
                 return q1.getCreatedAt().compareTo(q2.getCreatedAt());
             }
-        });
+        }));
 
         // Now you can use the sorted questionList as needed
         // For example, update your UI or perform any other operations

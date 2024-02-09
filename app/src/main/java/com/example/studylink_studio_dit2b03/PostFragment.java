@@ -230,7 +230,7 @@ public class PostFragment extends Fragment  {
             createButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String communityTitle = communityNameEditText.getText().toString();
+                    String communityTitle = communityNameEditText.getText().toString().toLowerCase();
                     String communityDescription = communityDescriptionEditText.getText().toString();
 
                     // Check if the community name and description are not empty
@@ -263,6 +263,9 @@ public class PostFragment extends Fragment  {
                                                         .addOnSuccessListener(aVoid1 -> {
                                                             updateOrAddJoinedCommunities(communityId);
                                                             navigateToCommunityDetails(community);
+
+                                                            communityNameEditText.setText("");
+                                                            communityDescriptionEditText.setText("");
                                                         })
                                                         .addOnFailureListener(e -> {
                                                             // Handle failure to create 'members' subcollection

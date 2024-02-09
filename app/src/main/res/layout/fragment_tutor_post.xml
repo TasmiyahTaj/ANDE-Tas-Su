@@ -2,6 +2,7 @@
 
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -23,24 +24,29 @@
         android:id="@+id/btnSellNotes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#f3b6b6"
         android:text="Sell Notes"
-        android:layout_marginBottom="16dp"/>
+        app:iconTint="#f3b6b6" />
 
     <!-- Option 2: Create Community Button -->
     <Button
         android:id="@+id/btnCreateCommunity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#f3b6b6"
         android:text="Create Community"
-        android:layout_marginBottom="16dp"/>
+        app:iconTint="#f3b6b6" />
 
     <!-- Option 3: Create Question Button -->
     <Button
         android:id="@+id/btnCreateQuestion"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Create Question"
-        android:layout_marginBottom="16dp"/>
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#f3b6b6"
+        android:text="Create Question" />
 
     <EditText
         android:id="@+id/etCommunityTitle"

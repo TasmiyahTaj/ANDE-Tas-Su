@@ -326,6 +326,14 @@ public class uploadQuestionFragment extends Fragment {
                                                             // Update the question with the question ID
                                                             documentReference.update("questionId", questionId)
                                                                     .addOnSuccessListener(aVoid -> {
+
+                                                                        chooseCommunityTextView.setText("");
+                                                                        title.setText("");
+                                                                        description.setText("");
+                                                                        attachedImage.setImageDrawable(null);
+                                                                        attachedImage.setVisibility(View.GONE);
+                                                                        buttonRemoveImage.setVisibility(View.GONE);
+
                                                                         // Handle success
                                                                         question.setQuestionId(questionId);
                                                                         Log.d("Post", "Question added successfully with ID: " + questionId);
@@ -368,6 +376,14 @@ public class uploadQuestionFragment extends Fragment {
                                             // Update the question with the question ID
                                             documentReference.update("questionId", questionId)
                                                     .addOnSuccessListener(aVoid -> {
+
+                                                        chooseCommunityTextView.setText("");
+                                                        title.setText("");
+                                                        description.setText("");
+                                                        attachedImage.setImageDrawable(null);
+                                                        attachedImage.setVisibility(View.GONE);
+                                                        buttonRemoveImage.setVisibility(View.GONE);
+
                                                         // Handle success
                                                         question.setQuestionId(questionId);
                                                         Log.d("Post", "Question added successfully with ID: " + questionId);
