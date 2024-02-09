@@ -41,7 +41,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            //textViewResult = itemView.findViewById(R.id.textViewResult);
+            textViewResult = itemView.findViewById(R.id.textViewResult);
         }
 
         public void bind(String result) {
